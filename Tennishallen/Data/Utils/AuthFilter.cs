@@ -22,7 +22,7 @@ public class AuthFilter(params Group.GroupName[] groups) : ActionFilterAttribute
             !service.ValidateToken())
         {
             if (allowedPaths.All(s => s != context.HttpContext.Request.Path))
-                context.HttpContext.Response.Redirect($"Auth/Login/");
+                context.HttpContext.Response.Redirect($"/Auth/Login/");
             return;
         }
 

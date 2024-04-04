@@ -1,49 +1,184 @@
-﻿<!DOCTYPE html>
+﻿@using Tennishallen.Services;
+@using Tennishallen.Data.Models;
+
+
+@{
+	var token = this.Context.Request.Cookies["Token"];
+	var jwtService = new JwtService();
+	bool isLoggedIn;
+	var userName = "";
+	bool isAdmin = false;
+	bool isAssistent = false;
+	bool isDentist = false;
+	bool isPatient = false;
+
+
+	if (token == null || !jwtService.ValidateToken(token)) isLoggedIn = false;
+	else isLoggedIn = true;
+	var group = new JwtService().GetUserGroups(token);
+
+	if (isLoggedIn)
+	{
+		userName = jwtService.GetUsername(token);
+
+		isAdmin = group.Contains(Group.GroupName.Admin);
+		isAssistent = group.Contains(Group.GroupName.Assistent);
+		isDentist = group.Contains(Group.GroupName.Dentist);
+		isPatient = group.Contains(Group.GroupName.Patient);
+	}
+	else
+	{
+		group = null;
+	}
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Tennishallen</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Tennishallen.styles.css" asp-append-version="true" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - TandheelkundigCentrum</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/TandheelkundigCentrum.styles.css" asp-append-version="true" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	<style scoped>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		.custom-bg {
+			background-color: #7B5DB9; /* indigo-500 */
+		}
+
+		.nav-link {
+			color: white;
+		}
+
+		.max-width-sidebar {
+			max-width: 250px !important;
+
+			@@media (max-width: 768px) {
+				max-width: 50px !important;
+			}
+		}
+
+		.sideBar-img {
+			max-width: 100px !important;
+			max-height: 100px !important;
+			object-fit: contain !important;
+
+			@@media (max-width: 768px) {
+				max-width: 40px !important;
+				max-height: 40px !important;
+			}
+		}
+
+		@@media (max-width: 768px) {
+			.collapsed-sidebar .d-sm-inline {
+				display: none !important;
+			}
+		}
+	</style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Tennishallen</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+	<header>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Tennishallen - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+		<nav>
+			<div class="container-fluid">
+				<div class="d-flex row flex-nowrap">
+					<div class="col-auto col-md-4 col-xl-3 px-sm-2 px-0 custom-bg fixed-top max-width-sidebar">
+						<div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 collapsed-sidebar">
+							<div class="d-flex justify-content-center align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none" style="width: 100%;">
+								<a asp-area="" asp-controller="Home" asp-action="Index" class="text-center">
+									<img src="~/assets/img/icon-logo-main-page-tandheelkundigcentrum.png" alt="TandheelkundigCentrum" class="img-fluid sideBar-img" />
+								</a>
+							</div>
+
+							<ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+								@if (isLoggedIn)
+								{
+									<li class="nav-item">
+										<a asp-area="" asp-controller="Colleague" asp-action="Index" class="nav-link align-middle px-0">
+											<i class="bi bi-person-badge"></i>
+											<span class="ms-1 d-sm-inline collapsed-text">Medewerkers</span>
+										</a>
+									</li>
+
+									@if (isAdmin || isDentist || isAssistent)
+									{
+										<li class="nav-item">
+											<a asp-area="" asp-controller="Appointment" class="nav-link align-middle px-0">
+												<i class="bi bi-calendar-event"></i>
+												<span class="ms-1 d-sm-inline collapsed-text">Afspraken</span>
+											</a>
+										</li>
+
+										<li class="nav-item">
+											<a asp-area="" asp-controller="Room" class="nav-link px-0 align-middle">
+												<i class="bi bi-house"></i>
+												<span class="ms-1 d-sm-inline collapsed-text">Kamers</span>
+											</a>
+										</li>
+										<li>
+											<a asp-area="" asp-controller="Treatment" class="nav-link px-0 align-middle">
+												<i class="bi bi-file-ruled"></i>
+												<span class="ms-1 d-sm-inline collapsed-text">Behandelingen</span>
+											</a>
+										</li>
+									}
+									@if (isAdmin || isPatient)
+									{
+										<li class="nav-item">
+											<a asp-area="" asp-controller="Rating" class="nav-link px-0 align-middle">
+												<i class="bi bi-star"></i>
+												<span class="ms-1 d-sm-inline collapsed-text">Beoordelingen</span>
+											</a>
+										</li>
+									}
+								}
+								@if (!isLoggedIn)
+								{
+									<li class="nav-item">
+										<a asp-controller="Auth" asp-action="Login" class="nav-link px-0 align-middle">
+											<i class="bi bi-box-arrow-in-right"></i>
+											<span class="ms-1 d-sm-inline collapsed-text">Inloggen</span>
+										</a>
+									</li>
+								}
+							</ul>
+							@if (isLoggedIn)
+							{
+								<div class="dropdown pb-4">
+									<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+										<i width="30" height="30" class="bi bi-person-circle"></i>
+										<span class="d-none d-sm-inline mx-1">@userName</span>
+									</a>
+									<ul class="dropdown-menu dropdown-menu-dark text-black text-small shadow" aria-labelledby="dropdownUser1">
+										<li><a class="dropdown-item text-black" asp-controller="Auth" asp-action="Logout">Uitloggen</a></li>
+									</ul>
+								</div>
+							}
+							<hr>
+						</div>
+					</div>
+					<main role="main" class="col py-3 offset-md-4 offset-xl-2">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col">
+									@RenderBody()
+								</div>
+							</div>
+						</div>
+					</main>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,73 @@
+﻿@model List<TandheelkundigCentrum.Data.Models.Appointment>
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+<div>
+    <div class="d-flex flex-row justify-content-between">
+        <h1 class="display-4">Afspraken</h1>
+        <div class="d-flex align-items-center">
+            <a asp-action="Create">
+                <button type="button" class="btn btn-success">
+                    <i class="bi bi-house-add"></i>
+                    Afspraak Toevoegen
+                </button>
+            </a>
+        </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Tandarts</th>
+                <th scope="col">Patient</th>
+                <th scope="col">Behandelingen</th>
+                <th scope="col">Kamer</th>
+                <th scope="col">Datum</th>
+                <th scope="col">Notitie</th>
+                <th scope="col">Bewerk</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var appointment in Model)
+            {
+                <tr>
+                    <th scope="row">
+                        <a asp-action="View" asp-route-id="@appointment.Id">
+                            @appointment.Id
+                        </a>
+                    </th>
+                    <td> 
+                        @appointment.Dentist.Fullname
+                    </td>
+                    <td>
+                        @appointment.Patient.Fullname
+                    </td>
+                    <td>
+                        @appointment.Treatments.Aggregate("", (s, treatment) => s = $"{s}{treatment.Name}, ")
+                    </td>
+                    <td>
+                        @appointment.Room.Name
+                    </td>
+                    <td>
+                        @appointment.DateTime
+                    </td>
+                    <td>
+                        @appointment.Note
+                    </td>
+                    <td>
+                        <div class="d-flex flex-row float-end">
+                            <a asp-action="Edit" asp-route-appointmentId="@appointment.Id">
+                                <button type="button" class="btn btn-warning">
+                                    <i class="bi bi-pencil-square"></i>
+                                    Bewerk
+                                </button>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

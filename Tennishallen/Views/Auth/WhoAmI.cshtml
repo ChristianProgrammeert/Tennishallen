@@ -1,0 +1,34 @@
+@model Tennishallen.Data.Models.User?
+
+@{
+    ViewData["Title"] = "WHOAMI";
+}
+
+<div >
+    <div class="d-flex flex-row justify-content-between">
+        <h1 class="display-4">This is you ;)</h1>
+    </div>
+    @if (Model == null)
+    {
+        <p>A Nobody :(</p>
+    }
+    else
+    {
+        <table class="table">
+            <tbody>
+            <tr>
+                <th scope="row">Id</th>
+                <td>@Model.Id</td>
+            </tr>
+            <tr>
+                <th scope="row">Name</th>
+                <td>@Model.FirstName @Model.LastName</td>
+            </tr>
+            <tr>
+                <th scope="row">Email</th>
+                <td>@Model.Email</td>
+            </tr>
+            </tbody>
+        </table>
+    }
+</div>

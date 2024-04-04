@@ -68,7 +68,7 @@ public class User : IBaseEntity<Guid>
             {
                 Id = 1,
                 UserId = guid,
-                Name = Group.GroupName.Admin,
+                Name = Group.GroupName.Coach,
             });
         string[][] names =
         [

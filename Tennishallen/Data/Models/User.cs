@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +29,15 @@ public class User : IBaseEntity<Guid>
     public bool Active { get; set; }
     public double HourlyWage { get; set; }
 
+    public Collection<Reservation> MemberReservations { get; set; } = [];
+    public Collection<Reservation> CoachReservations { get; set; } = [];
     public List<Group> Groups { get; set; }
+
+    [NotMapped]
+    public List<Reservation> Reservations
+    {
+        get => [.. MemberReservations ?? [], .. CoachReservations ?? []];
+    }
 
 
     internal static void OnModelCreating(ModelBuilder model)

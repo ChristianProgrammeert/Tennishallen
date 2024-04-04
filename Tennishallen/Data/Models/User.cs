@@ -6,6 +6,7 @@ using Tennishallen.Data.Utils;
 
 namespace Tennishallen.Data.Models;
 
+[Index(nameof(Email), IsUnique = true)]
 public class User : IBaseEntity<Guid>
 {
     [Key] public Guid Id { get; set; }

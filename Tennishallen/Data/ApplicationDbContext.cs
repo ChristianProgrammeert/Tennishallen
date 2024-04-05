@@ -7,6 +7,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Group> Groups { get; set; }
+    public DbSet<Court> Courts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -18,18 +18,16 @@ namespace Tennishallen.Controllers
 
         public IActionResult Index()
         {
-            var invoices = invoiceService.GetAllReservationsForUserAndMonthsAsync(months: 1);   
+            var token = HttpContext.Request.Cookies["Token"];
+            var userId = new JwtService(token).GetUserId();
+            var invoices = invoiceService.GetAllInvoicesForUserAsync(userId);
             return View(invoices);
         }
 
-        public IActionResult ViewInvoice(Guid userId, int year, int month)
+        public async Task<IActionResult> View(int id)
         {
-            var invoice = invoiceService.GenerateMonthlyInvoiceAsync(userId, year, month);
-            return View(invoice);
-        }
-
-        public async Task<IActionResult> Monthly(Guid userId, int year, int month)
-        {
+            var token = HttpContext.Request.Cookies["Token"];
+            var userId = new JwtService(token).GetUserId();
             var invoice = await invoiceService.GenerateMonthlyInvoiceAsync(userId, year, month);
             return View(invoice);
         }

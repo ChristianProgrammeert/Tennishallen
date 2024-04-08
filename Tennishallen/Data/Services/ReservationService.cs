@@ -66,6 +66,7 @@ namespace Tennishallen.Services
 						 .Where(a => a.MemberId == id)
 						 .Include(a => a.Court)
 						 .Include(a => a.Coach)
+                         .Include(a => a.Member)
 						 .ToListAsync();
 		}
 		internal async Task<List<Reservation>> GetCourtsByUser(Guid? id)

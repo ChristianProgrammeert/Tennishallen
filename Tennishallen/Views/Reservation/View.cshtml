@@ -25,11 +25,10 @@
 		<thead>
 			<tr>
 				<th scope="col">Id</th>
-				<th scope="col">Tandarts</th>
-				<th scope="col">Patient</th>
-				<th scope="col">Kamer</th>
-				<th scope="col">Datum</th>
-				<th scope="col">Notitie</th>
+				<th scope="col">Docent</th>
+				<th scope="col">Member</th>
+				<th scope="col">Veld</th>
+				<th scope="col">Datum en tijd</th>
 				<th scope="col">Bewerk</th>
 			</tr>
 		</thead>
@@ -40,21 +39,28 @@
 						@Model.Id
 					</a>
 				</th>
-				<td>
-					@Model.Coach.Fullname
-				</td>
+				@if (Model.Coach == null)
+				{
+					<td>
+						Geen docent
+					</td>
+				}
+				else
+				{
+					<td>
+						@Model.Coach.Fullname
+					</td>
+				}
 				<td>
 					@Model.Member.Fullname
 				</td>
 				<td>
 					@Model.Court.Name
 				</td>
-				@* <td>
-					@Model.DateTime
-				</td>
 				<td>
-					@Model.Note
-				</td> *@
+					@Model.Date
+					@($"{Model.Hour:00}:00")
+				</td>
 				<td>
 					<div class="d-flex flex-row float-end">
 						<a asp-action="Edit" asp-route-appointmentId="@Model.Id">

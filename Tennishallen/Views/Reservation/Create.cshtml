@@ -1,73 +1,89 @@
 ﻿@using Tennishallen.Data.Models
 @model Reservation
 @{
-	ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Afspraak maken";
 }
 
 <div>
-	<div class="d-flex flex-row justify-content-between">
-		<h1 class="display-4">Afspraak Toevoegen</h1>
-		<div class="d-flex align-items-center">
-			<a asp-action="Index">
-				<button type="button" class="btn btn-info">
-					<i class="bi bi-houses"></i>
-					Alle Kamers
-				</button>
-			</a>
-		</div>
-	</div>
-	<form method="post">
-		<div class="form-group">
-			<label>Behandelingen:</label>
-			@*      @foreach(Treatment t in ViewBag.Treatments)
-			{
-			<input
-			type="checkbox"
-			class="btn-check"
-			id="treatment-@t.Id"
-			name="treatment-@t.Id"
-			value="@Model.Treatments.Any(mt => mt.Id == t.Id)"
-			autocomplete="off"
-			>
-			<label class="btn btn-outline-primary" for="treatment-@t.Id">@t.Name</label>
-			} *@
-		</div>
+    <div class="d-flex flex-row justify-content-between">
+        <h1 class="display-4">Afspraak Toevoegen</h1>
+        <div class="d-flex align-items-center">
+            <a asp-action="Index">
+                <button type="button" class="btn btn-info">
+                    <i class="bi bi-houses"></i>
+                    Alle Kamers
+                </button>
+            </a>
+        </div>
+    </div>
+    <form method="post">
+        <div class="form-group">
+            <label>Type afspraak:</label>
+            <select asp-for="CoachId" class="form-control" id="typeLesSelect">
+                <option>Afspraak met les</option>
+                <option value="null">Alleen baan reserveren</option>
+            </select>
+            <span asp-validation-for="CoachId" class="text-danger"></span>
+        </div>
 
-		<div class="form-group">
-			<label>Tandarts:</label>
-			<select asp-for="CoachId" class="form-control">
-				<option>-- Selecteer Coach --</option>
-				@foreach (User coach in ViewBag.Coach)
-				{
-					<option value="@coach.Id">@coach.Fullname</option>
-				}
-			</select>
-			<span asp-validation-for="CoachId" class="text-danger"></span>
-		</div>
-		<div class="form-group">
-			<label for="Room">Veld:</label>
-			<select asp-for="CourtId" class="form-control">
-				<option value="">-- Selecteer Kamer --</option>
-				@foreach (Court court in ViewBag.Courts)
-				{
-					<option value="@court.Id">@court.Name</option>
-				}
-			</select>
-			<span asp-validation-for="CourtId" class="text-danger"></span>
-		</div>
+        <div class="form-group" id="docentSelectWrapper">
+            <label>Docent:</label>
+            <select asp-for="CoachId" class="form-control">
+                <option>-- Selecteer Coach --</option>
+                @foreach (User coach in ViewBag.Coaches)
+                {
+                    <option value="@coach.Id">@coach.Fullname</option>
+                }
+            </select>
+            <span asp-validation-for="CoachId" class="text-danger"></span>
+        </div>
 
-		@* <div class="form-group">
-			<label for="DateTime">Appointment Date and Time:</label>
-			<input asp-for="DateTime" class="form-control" type="datetime-local">
-			<span asp-validation-for="DateTime" class="text-danger"></span>
-		</div>
+        <div class="form-group">
+            <label for="Room">Veld:</label>
+            <select asp-for="CourtId" class="form-control">
+                <option value="">-- Selecteer Kamer --</option>
+                @foreach (Court court in ViewBag.Courts)
+                {
+                    <option value="@court.Id">@court.Name</option>
+                }
+            </select>
+            <span asp-validation-for="CourtId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>Datum:</label>
+            <input asp-for="Date" class="form-control" type="date"/>
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>Tijd:</label>
+            <select asp-for="Hour" class="form-control">
+                @for (int i = 9; i <= 21; i++)
+                {
+                    <option value="@i">@($"{i:00}:00")</option>
+                }
+            </select>
+            <span asp-validation-for="Hour" class="text-danger"></span>
+        </div>
 
-		<div class="form-group">
-			<label for="Note">Note:</label>
-			<textarea asp-for="Note" class="form-control"></textarea>
-			<span asp-validation-for="Note" class="text-danger"></span>
-		</div> *@
-
-		<button type="submit" class="btn btn-primary">Maak Afspraak</button>
-	</form>
+        <button type="submit" class="btn btn-primary">Maak Afspraak</button>
+    </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var typeLesSelect = document.getElementById('typeLesSelect');
+        var docentSelectWrapper = document.getElementById('docentSelectWrapper');
+
+        typeLesSelect.addEventListener('change', function () {
+            if (typeLesSelect.value === 'null') {
+                docentSelectWrapper.style.display = 'none';
+            } else {
+                docentSelectWrapper.style.display = 'block';
+            }
+        });
+
+        if (typeLesSelect.value === 'null') {
+            docentSelectWrapper.style.display = 'none';
+        }
+    });
+</script>

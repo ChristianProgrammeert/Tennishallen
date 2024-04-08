@@ -12,8 +12,8 @@ using Tennishallen.Data;
 namespace Tennishallen.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240404113122_reservations")]
-    partial class reservations
+    [Migration("20240408110025_court")]
+    partial class court
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,6 +68,38 @@ namespace Tennishallen.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Groups");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = 0,
+                            UserId = new Guid("2db2301d-4e06-49f1-82be-3f9ddbc64da8")
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = 0,
+                            UserId = new Guid("2dd43519-a8e0-4831-a646-732026386805")
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = 0,
+                            UserId = new Guid("f663d196-ac33-431d-9a55-3c53f554ebb6")
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = 0,
+                            UserId = new Guid("f722fe00-bfcc-4814-88c3-896c39a6113d")
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = 0,
+                            UserId = new Guid("b1ee2eb9-1ff5-4e8c-b542-b1e2138887b6")
+                        });
                 });
 
             modelBuilder.Entity("Tennishallen.Data.Models.Reservation", b =>
@@ -81,10 +113,7 @@ namespace Tennishallen.Migrations
                     b.Property<Guid?>("CoachId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CourtId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("CourtId1")
+                    b.Property<int>("CourtId")
                         .HasColumnType("int");
 
                     b.Property<DateOnly>("Date")
@@ -103,7 +132,7 @@ namespace Tennishallen.Migrations
 
                     b.HasIndex("CoachId");
 
-                    b.HasIndex("CourtId1");
+                    b.HasIndex("CourtId");
 
                     b.HasIndex("MemberId");
 
@@ -132,7 +161,7 @@ namespace Tennishallen.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -159,7 +188,87 @@ namespace Tennishallen.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("2db2301d-4e06-49f1-82be-3f9ddbc64da8"),
+                            Active = true,
+                            Address = "Tennisstraat 1",
+                            Birthdate = new DateOnly(1, 1, 1),
+                            City = "Hengelo",
+                            Email = "r.vandongen@tennishallenhengelo.nl",
+                            FirstName = "Richard",
+                            HourlyWage = 0.0,
+                            LastName = "van Dongen",
+                            Password = "$2a$10$0dvXFxGlhIbMQF0Za7tCx.TypVAiDATGO7jh4ohcXaL77oHWV/qHW",
+                            Phone = "06 12345678",
+                            PostalCode = "1234TB"
+                        },
+                        new
+                        {
+                            Id = new Guid("2dd43519-a8e0-4831-a646-732026386805"),
+                            Active = true,
+                            Address = "Tennisstraat 2",
+                            Birthdate = new DateOnly(1, 1, 1),
+                            City = "Hengelo",
+                            Email = "B.Hand@tennishallenhengelo.nl",
+                            FirstName = "Beck",
+                            HourlyWage = 0.0,
+                            LastName = "Hand",
+                            Password = "$2a$10$XqZLSpyR9Gr3.jH/J1zt5OEKVvOJxeD5SP7geZQxyts49sIzhsmNS",
+                            Phone = "06 98152523",
+                            PostalCode = "1234TB"
+                        },
+                        new
+                        {
+                            Id = new Guid("f663d196-ac33-431d-9a55-3c53f554ebb6"),
+                            Active = true,
+                            Address = "Tennisstraat 3",
+                            Birthdate = new DateOnly(1, 1, 1),
+                            City = "Hengelo",
+                            Email = "G.Slam@tennishallenhengelo.nl",
+                            FirstName = "Grant",
+                            HourlyWage = 0.0,
+                            LastName = "Slam",
+                            Password = "$2a$10$KQCndWH.YX9NKtRj.Q.vIu251ETtVQLp7M/WpugdSk3xD45ZKQrwS",
+                            Phone = "06 64665037",
+                            PostalCode = "1234TB"
+                        },
+                        new
+                        {
+                            Id = new Guid("f722fe00-bfcc-4814-88c3-896c39a6113d"),
+                            Active = true,
+                            Address = "Tennisstraat 4",
+                            Birthdate = new DateOnly(1, 1, 1),
+                            City = "Hengelo",
+                            Email = "T.Ishbahl@tennishallenhengelo.nl",
+                            FirstName = "Tehn",
+                            HourlyWage = 0.0,
+                            LastName = "Ishbahl",
+                            Password = "$2a$10$0SlB7lC4GrEjB5MCDrP0DuVBaBRw..RTtNvGNJiopVi/yiRsQn2QO",
+                            Phone = "06 50917581",
+                            PostalCode = "1234TB"
+                        },
+                        new
+                        {
+                            Id = new Guid("b1ee2eb9-1ff5-4e8c-b542-b1e2138887b6"),
+                            Active = true,
+                            Address = "Tennisstraat 5",
+                            Birthdate = new DateOnly(1, 1, 1),
+                            City = "Hengelo",
+                            Email = "C.Racket@tennishallenhengelo.nl",
+                            FirstName = "Courtney",
+                            HourlyWage = 0.0,
+                            LastName = "Racket",
+                            Password = "$2a$10$JXGHodl1IAn5pQkBq5cCLeHZg8vwYBunYqyelJ5igi4.tGC5JUTIi",
+                            Phone = "06 25018196",
+                            PostalCode = "1234TB"
+                        });
                 });
 
             modelBuilder.Entity("Tennishallen.Data.Models.Group", b =>
@@ -181,8 +290,10 @@ namespace Tennishallen.Migrations
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Tennishallen.Data.Models.Court", "Court")
-                        .WithMany()
-                        .HasForeignKey("CourtId1");
+                        .WithMany("Reservations")
+                        .HasForeignKey("CourtId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("Tennishallen.Data.Models.User", "Member")
                         .WithMany("MemberReservations")
@@ -194,6 +305,11 @@ namespace Tennishallen.Migrations
                     b.Navigation("Court");
 
                     b.Navigation("Member");
+                });
+
+            modelBuilder.Entity("Tennishallen.Data.Models.Court", b =>
+                {
+                    b.Navigation("Reservations");
                 });
 
             modelBuilder.Entity("Tennishallen.Data.Models.User", b =>

@@ -20,13 +20,12 @@
         <thead>
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Tandarts</th>
-                <th scope="col">Patient</th>
-                <th scope="col">Behandelingen</th>
-                <th scope="col">Kamer</th>
-                <th scope="col">Datum</th>
-                <th scope="col">Notitie</th>
+                <th scope="col">Docent</th>
+                <th scope="col">Member</th>
+                <th scope="col">Veld</th>
+                <th scope="col">Datum en tijd</th>
                 <th scope="col">Bewerk</th>
+                <th scope="col">Verwijder</th>
             </tr>
         </thead>
         <tbody>
@@ -38,27 +37,44 @@
                             @appointment.Id
                         </a>
                     </th>
-                    <td> 
-                        @appointment.Coach.Fullname
-                    </td>
+                    @if (appointment.Coach == null)
+					{
+						<td>
+							Geen docent
+						</td>
+					}
+					else
+					{
+						<td>
+							@appointment.Coach.Fullname
+						</td>
+					}
                     <td>
                         @appointment.Member.Fullname
                     </td>
                     <td>
                         @appointment.Court.Name
                     </td>
-@*                     <td>
-                        @appointment.DateTime
-                    </td>
                     <td>
-                        @appointment.Note
-                    </td> *@
+                        @appointment.Date
+                        @($"{appointment.Hour:00}:00")
+                    </td>
                     <td>
                         <div class="d-flex flex-row float-end">
                             <a asp-action="Edit" asp-route-appointmentId="@appointment.Id">
                                 <button type="button" class="btn btn-warning">
                                     <i class="bi bi-pencil-square"></i>
                                     Bewerk
+                                </button>
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex flex-row float-end">
+                            <a asp-action="Delete" asp-route-id="@appointment.Id">
+                                <button type="button" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                    Verwijder
                                 </button>
                             </a>
                         </div>

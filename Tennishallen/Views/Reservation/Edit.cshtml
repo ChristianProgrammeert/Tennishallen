@@ -1,11 +1,12 @@
-﻿@* @TandheelkundigCentrum.Data.Models
+﻿@using Tennishallen.Data.Models
+@model Reservation
 @{
-    ViewData["Title"] = Model == null ? "Afspraak maken" : "Afspraak bewerken";
+    ViewData["Title"] = "Afspraak bewerken";
 }
 
 <div>
     <div class="d-flex flex-row justify-content-between">
-        <h1 class="display-4">Afspraak @(Model == null ? "Toevoegen" : "Wijzigen")</h1>
+        <h1 class="display-4">Afspraak Wijzigen</h1>
         <div class="d-flex align-items-center">
             <a asp-action="Index">
                 <button type="button" class="btn btn-info">
@@ -17,60 +18,51 @@
     </div>
     <form method="post">
         <div class="form-group">
-            <label for="SelectedTreatmentIds">Behandelingen:</label>
-            <select asp-for="SelectedTreatmentIds" class="form-control" multiple>
-                @foreach (var treatment in Model.Treatments)
+            <label>Type afspraak:</label>
+            <select asp-for="CoachId" class="form-control" id="typeLesSelect">
+                <option>Afspraak met les</option>
+                <option value="null">Alleen baan reserveren</option>
+            </select>
+            <span asp-validation-for="CoachId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group" id="docentSelectWrapper">
+            <label>Docent:</label>
+            <select asp-for="CoachId" class="form-control">
+                <option>-- Selecteer Coach --</option>
+                @foreach (User coach in ViewBag.Coaches)
                 {
-                    <option value="@treatment.Id">@treatment.Name</option>
+                    <option value="@coach.Id">@coach.Fullname</option>
                 }
             </select>
-            <span asp-validation-for="SelectedTreatmentIds" class="text-danger"></span>
+            <span asp-validation-for="CoachId" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="DentistId">Tandarts:</label>
-            <select asp-for="DentistId" class="form-control">
-                <option value="">-- Selecteer Tandarts --</option>
-                @foreach (var dentist in Model.Dentists)
-                {
-                    <option value="@dentist.Id">@dentist.Prefix @dentist.LastName</option>
-                }
-            </select>
-            <span asp-validation-for="DentistId" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label for="PatientId">Patient:</label>
-            <select asp-for="PatientId" class="form-control">
-                <option value="">-- Selecteer Patient --</option>
-                @foreach (var patient in Model.Patients)
-                {
-                    <option value="@patient.Id">@patient.Prefix @patient.LastName</option>
-                }
-            </select>
-            <span asp-validation-for="PatientId" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label for="RoomId">Kamer:</label>
-            <select asp-for="RoomId" class="form-control">
+            <label for="Room">Veld:</label>
+            <select asp-for="CourtId" class="form-control">
                 <option value="">-- Selecteer Kamer --</option>
-                @foreach (var room in Model.Rooms)
+                @foreach (Court court in ViewBag.Courts)
                 {
-                    <option value="@room.Id">@room.Name</option>
+                    <option value="@court.Id">@court.Name</option>
                 }
             </select>
-            <span asp-validation-for="RoomId" class="text-danger"></span>
+            <span asp-validation-for="CourtId" class="text-danger"></span>
         </div>
-
         <div class="form-group">
-            <label for="DateTime">Appointment Date and Time:</label>
-            <input asp-for="DateTime" class="form-control" type="datetime-local">
-            <span asp-validation-for="DateTime" class="text-danger"></span>
+            <label>Datum:</label>
+            <input asp-for="Date" class="form-control" type="date" />
+            <span asp-validation-for="Date" class="text-danger"></span>
         </div>
-
         <div class="form-group">
-            <label for="Note">Note:</label>
-            <textarea asp-for="Note" class="form-control"></textarea>
-            <span asp-validation-for="Note" class="text-danger"></span>
+            <label>Tijd:</label>
+            <select asp-for="Hour" class="form-control">
+                @for (int i = 9; i <= 21; i++)
+                {
+                    <option value="@($"{i:00}:00")">@($"{i:00}:00")</option>
+                }
+            </select>
+            <span asp-validation-for="Hour" class="text-danger"></span>
         </div>
 
         <button type="submit" class="btn btn-primary">@(Model == null ? "Maak Afspraak" : "Wijzig Afspraak")</button>
@@ -92,60 +84,42 @@
             <div class="col-md-8 offset-2">
                 <form method="post">
                     <div class="form-group">
-                        <label for="SelectedTreatmentIds">Behandelingen:</label>
-                        <select asp-for="SelectedTreatmentIds" class="form-control" multiple>
-                            @foreach (var treatment in Model.Treatments)
-                            {
-                                <option value="@treatment.Id">@treatment.Name</option>
-                            }
-                        </select>
-                        <span asp-validation-for="SelectedTreatmentIds" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="DentistId">Tandarts:</label>
-                        <select asp-for="DentistId" class="form-control">
+                        <label for="CoachId">Docent:</label>
+                        <select asp-for="CoachId" class="form-control">
                             <option value="">-- Selecteer Tandarts --</option>
-                            @foreach (var dentist in Model.Dentists)
+                            @foreach (User coach in ViewBag.Coaches)
                             {
-                                <option value="@dentist.Id">@dentist.Prefix @dentist.LastName</option>
+                                <option value="@coach.Id">@coach.Fullname</option>
                             }
                         </select>
-                        <span asp-validation-for="DentistId" class="text-danger"></span>
+                        <span asp-validation-for="CoachId" class="text-danger"></span>
                     </div>
+
                     <div class="form-group">
-                        <label for="PatientId">Patient:</label>
-                        <select asp-for="PatientId" class="form-control">
-                            <option value="">-- Selecteer Patient --</option>
-                            @foreach (var patient in Model.Patients)
-                            {
-                                <option value="@patient.Id">@patient.Prefix @patient.LastName</option>
-                            }
-                        </select>
-                        <span asp-validation-for="PatientId" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="RoomId">Kamer:</label>
-                        <select asp-for="RoomId" class="form-control">
+                        <label for="Room">Veld:</label>
+                        <select asp-for="CourtId" class="form-control">
                             <option value="">-- Selecteer Kamer --</option>
-                            @foreach (var room in Model.Rooms)
+                            @foreach (Court court in ViewBag.Courts)
                             {
-                                <option value="@room.Id">@room.Name</option>
+                                <option value="@court.Id">@court.Name</option>
                             }
                         </select>
-                        <span asp-validation-for="RoomId" class="text-danger"></span>
+                        <span asp-validation-for="CourtId" class="text-danger"></span>
                     </div>
-
                     <div class="form-group">
-                        <label for="DateTime">Appointment Date and Time:</label>
-                        <input asp-for="DateTime" class="form-control" type="datetime-local">
-                        <span asp-validation-for="DateTime" class="text-danger"></span>
+                        <label>Datum:</label>
+                        <input asp-for="Date" class="form-control" type="date" />
+                        <span asp-validation-for="Date" class="text-danger"></span>
                     </div>
-
                     <div class="form-group">
-                        <label for="Note">Note:</label>
-                        <textarea asp-for="Note" class="form-control"></textarea>
-                        <span asp-validation-for="Note" class="text-danger"></span>
+                        <label>Tijd:</label>
+                        <select asp-for="Hour" class="form-control">
+                            @for (int i = 9; i <= 21; i++)
+                            {
+                                <option value="@($"{i:00}:00")">@($"{i:00}:00")</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Hour" class="text-danger"></span>
                     </div>
 
                     <button type="submit" class="btn btn-primary">@(Model == null ? "Maak Afspraak" : "Wijzig Afspraak")</button>
@@ -153,4 +127,4 @@
             </div>
         </div>
     </div>
-</div> *@
+</div>

@@ -7,6 +7,8 @@ using Tennishallen.Data.Models;
 using Tennishallen.Models;
 using Tennishallen.Data.Services;
 using Tennishallen.Services;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Tennishallen.Models.Court;
 
 namespace Tennishallen.Controllers
 {
@@ -22,12 +24,12 @@ namespace Tennishallen.Controllers
             var id = new JwtService(Request).GetUserId();
             var group = new JwtService(Request).GetUserGroups();
 
-            List<Reservation> reservation;
+            IEnumerable<Reservation> reservation;
             if (group.Contains(Group.GroupName.Admin) || group.Contains(Group.GroupName.Member))
-				reservation = (await reservationService.GetAllAsync(appointment => appointment.Court, a => a.Coach, a => a.Member)).ToList();
+				reservation = await reservationService.GetAllAsync(a => a.Court, a => a.Coach, a => a.Member);
             else
 				reservation = await reservationService.GetLessonByUser(id);
-            return View(reservationService);
+            return View(reservation);
         }
 
 
@@ -45,19 +47,41 @@ namespace Tennishallen.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Reservation model)
+		public async Task<IActionResult> Create(Reservation model)
+		{
+			// Get the current user's ID from the JWT token
+			var userId = new JwtService(Request).GetUserId();
+
+			// Set the MemberId of the Reservation model to the current user's ID
+			model.MemberId = userId;
+
+			// Add the Reservation model to the database
+			model = await reservationService.AddAsync(model);
+
+			return RedirectToAction("View", new { id = model.Id });
+		}
+
+        public async Task<IActionResult> Delete(int id)
         {
-            model = await reservationService.AddAsync(model);
-            return RedirectToAction("View", new { id = model.Id });
+            try
+            {
+                await reservationService.DeleteAsync(id);
+            }
+            catch (Exception _)
+            {
+                return RedirectToAction("View", id);
+            }
+
+            return RedirectToAction("Index");
         }
 
         public async Task<ViewResult> View(int id)
         {
-            return View(await reservationService.GetLessonsById(id));
+            return View(await reservationService.GetCourtsById(id));
         }
 
         public IActionResult Edit()
-        {
+                {
             throw new NotImplementedException();
         }
     }

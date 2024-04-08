@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Tennishallen.Models.InvoiceViewModel>
+﻿@model HashSet<DateOnly>
 
 @{
     ViewData["Title"] = "Invoices";
@@ -24,10 +24,8 @@
                     </td>
                     <td>
                         <div class="d-flex flex-row">
-                            <a asp-action="ViewInvoice" asp-route-userId="@invoice.UserId" asp-route-year="@invoice.Year" asp-route-month="@invoice.Month">
-                                <button type="button" class="btn btn-primary">
-                                    View Invoice
-                                </button>
+                            <a href="@Url.Action("ViewInvoice", "Invoice", new { invoiceId = invoice.InvoiceId })" class="btn btn-primary">
+                                View Invoice
                             </a>
                         </div>
                     </td>

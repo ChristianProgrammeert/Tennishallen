@@ -9,7 +9,8 @@ namespace Tennishallen.Models
         public string Email { get; set; }
         public int Year { get; set; }
         public int Month { get; set; }
-        public double TotalCost { get; set; }
+		public string InvoiceId { get; set; }
+		public double TotalCost { get; set; }
         public List<Reservation> CourtReservations { get; set; }
         public List<Reservation> Lessons { get; set; }
     }

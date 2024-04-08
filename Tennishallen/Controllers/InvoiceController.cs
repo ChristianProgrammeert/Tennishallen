@@ -16,19 +16,20 @@ namespace Tennishallen.Controllers
     {
         InvoiceService invoiceService = new(context);
 
-        public async Task<IActionResult> IndexAsync()
+        public IActionResult Index()
         {
-            var userId = new JwtService(Request).GetUserId();
-            var invoices = await invoiceService.GetAllInvoicesForUserAsync(userId);
+            var token = HttpContext.Request.Cookies["Token"];
+            var userId = new JwtService(token).GetUserId();
+            var invoices = invoiceService.GetAllInvoicesForUserAsync(userId);
             return View(invoices);
         }
 
-        //public async Task<IActionResult> View(int id)
-        //{
-        //    var token = HttpContext.Request.Cookies["Token"];
-        //    var userId = new JwtService(token).GetUserId();
-        //    var invoice = await invoiceService.GenerateMonthlyInvoiceAsync(userId, year, month);
-        //    return View(invoice);
-        //}
+        public async Task<IActionResult> View(int id)
+        {
+            var token = HttpContext.Request.Cookies["Token"];
+            var userId = new JwtService(token).GetUserId();
+            var invoice = await invoiceService.GenerateMonthlyInvoiceAsync(userId, year, month);
+            return View(invoice);
+        }
     }
 }

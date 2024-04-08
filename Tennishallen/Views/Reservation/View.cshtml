@@ -42,16 +42,16 @@
 					</a>
 				</th>
 
-				@if (Model.CoachId == null)
+				@if (Model.CoachId.HasValue)
 				{
 					<td>
-						Geen docent
+						@Model.Coach.Fullname
 					</td>
 				}
 				else
 				{
 					<td>
-						@Model.Coach.Fullname
+						Geen docent
 					</td>
 				}
 				<td>

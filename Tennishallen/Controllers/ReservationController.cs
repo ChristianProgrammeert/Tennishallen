@@ -31,7 +31,7 @@ namespace Tennishallen.Controllers
 				reservation = await reservationService.GetAllAsync(a => a.Court, a => a.Coach, a => a.Member);
             else
 				reservation = await reservationService.GetLessonByUser(id);
-            return View(reservation);
+            return View(reservation.ToList());
         }
 
 
@@ -76,7 +76,7 @@ namespace Tennishallen.Controllers
 
         public async Task<ViewResult> View(int id)
         {
-            return View(await reservationService.GetCourtsById(id));
+            return View(await reservationService.GetReservationsById(id));
         }
 
         public IActionResult Edit()

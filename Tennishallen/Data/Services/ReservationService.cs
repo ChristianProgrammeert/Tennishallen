@@ -31,10 +31,10 @@ namespace Tennishallen.Services
             // Retrieve appointments from the database by user id.
             return await GetByIdAsync(id, reservation => reservation.Coach, reservation => reservation.Member, reservation => reservation.Court);
         }
-        public async Task<Reservation?> GetCourtsById(int id)
+        public async Task<Reservation?> GetReservationsById(int id)
         {
             // Retrieve appointments from the database by user id.
-            return await GetByIdAsync(id, reservation => reservation.Member, reservation => reservation.Court);
+            return await GetByIdAsync(id, reservation => reservation.Member, reservation => reservation.Court, r => r.Coach);
         }
 
         internal async Task<List<Court>> GetAllCourts()

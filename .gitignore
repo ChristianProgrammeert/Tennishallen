@@ -364,3 +364,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Tennishallen/Migrations/20240408110025_court.cs
+/Tennishallen/Migrations/20240408110025_court.Designer.cs
+/Tennishallen/Migrations/20240408111557_fuck.cs
+/Tennishallen/Migrations/20240408111557_fuck.Designer.cs
+/Tennishallen/Migrations/ApplicationDbContextModelSnapshot.cs

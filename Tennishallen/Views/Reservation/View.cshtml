@@ -33,13 +33,16 @@
 			</tr>
 		</thead>
 		<tbody>
+			@Model.CoachId
 			<tr>
+
 				<th scope="row">
 					<a asp-action="View" asp-route-id="@Model.Id">
 						@Model.Id
 					</a>
 				</th>
-				@if (Model.Coach == null)
+
+				@if (Model.CoachId == null)
 				{
 					<td>
 						Geen docent

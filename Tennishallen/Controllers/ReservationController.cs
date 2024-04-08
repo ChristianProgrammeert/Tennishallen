@@ -9,6 +9,7 @@ using Tennishallen.Data.Services;
 using Tennishallen.Services;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Tennishallen.Models.Court;
+using Tennishallen.Data.Utils;
 
 namespace Tennishallen.Controllers
 {
@@ -18,6 +19,7 @@ namespace Tennishallen.Controllers
         ReservationService reservationService = new(context);
         AuthService userService = new(context);
 
+        // [AuthFilter(Group.GroupName.Admin, Group.GroupName.Member, Group.GroupName.Coach)]
         public async Task<IActionResult> Index()
         {
             var token = HttpContext.Request.Cookies["Token"];
@@ -49,13 +51,10 @@ namespace Tennishallen.Controllers
         [HttpPost]
 		public async Task<IActionResult> Create(Reservation model)
 		{
-			// Get the current user's ID from the JWT token
 			var userId = new JwtService(Request).GetUserId();
 
-			// Set the MemberId of the Reservation model to the current user's ID
-			model.MemberId = userId;
+			model.MemberId = userId.Value;
 
-			// Add the Reservation model to the database
 			model = await reservationService.AddAsync(model);
 
 			return RedirectToAction("View", new { id = model.Id });

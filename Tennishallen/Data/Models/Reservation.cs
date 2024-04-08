@@ -8,12 +8,12 @@ namespace Tennishallen.Data.Models;
 public class Reservation : IBaseEntity<int>
 {
     [Key] public int Id { get; set; }
-    public Guid? MemberId { get; set; }
-    public User? Member{ get; set; }
+    public Guid MemberId { get; set; }
+    public User Member{ get; set; }
     public Guid? CoachId { get; set; }
     public User? Coach { get; set; }
     public int CourtId { get; set; }
-    public Court? Court { get; set; }
+    public Court Court { get; set; }
     public double Price { get; set; }
     public DateOnly Date { get; set; }
     public int Hour { get; set; }

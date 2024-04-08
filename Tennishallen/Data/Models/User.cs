@@ -7,6 +7,7 @@ using Tennishallen.Data.Utils;
 
 namespace Tennishallen.Data.Models;
 
+[Index(nameof(Email), IsUnique = true)]
 public class User : IBaseEntity<Guid>
 {
     [Key] public Guid Id { get; set; }
@@ -61,13 +62,14 @@ public class User : IBaseEntity<Guid>
                 City = "Hengelo",
                 PostalCode = "1234TB",
                 Phone = "06 12345678",
+                Active = true,
             });
         model.Entity<Group>().HasData(
             new Group
             {
                 Id = 1,
                 UserId = guid,
-                Name = Group.GroupName.Admin,
+                Name = Group.GroupName.Coach,
             });
         string[][] names =
         [
@@ -92,6 +94,7 @@ public class User : IBaseEntity<Guid>
                     City = "Hengelo",
                     PostalCode = "1234TB",
                     Phone = $"06 {new Random().Next(10_000_000, 99_999_999)}",
+                    Active = true,
                 });
             model.Entity<Group>().HasData(
                 new Group

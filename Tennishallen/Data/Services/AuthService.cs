@@ -29,7 +29,7 @@ public class AuthService(ApplicationDbContext context) : BaseRepository<User, Gu
     public async Task<User?> GetUserByEmailAndPassword(string email, string password)
     {
         var user = await GetUserByEmail(email);
-        if (user == null || !PasswordHasher.VerifyPassword(password, user.Password))
+        if (user == null || !PasswordHasher.VerifyPassword(password, user.Password) || !user.Active)
             return null;
         return user;
     }

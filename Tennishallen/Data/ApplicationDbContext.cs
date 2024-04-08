@@ -13,5 +13,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         base.OnModelCreating(modelBuilder);
         User.OnModelCreating(modelBuilder);
+        Reservation.OnModelCreating(modelBuilder);  
     }
 }

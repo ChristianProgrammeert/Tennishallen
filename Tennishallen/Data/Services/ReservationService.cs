@@ -10,102 +10,70 @@ using Tennishallen.Models;
 
 namespace Tennishallen.Services
 {
-    public class ReservationService(ApplicationDbContext context) : BaseRepository<Appointment, int>(context)
+    public class ReservationService(ApplicationDbContext context) : BaseRepository<Reservation, int>(context)
     {
 
-        public async Task<List<Appointment>> GetAllAppointments()
+        public async Task<List<Reservation>> GetAllLessonsReservations()
         {
             // Retrieve appointments from the database
-            var all = await GetAllAsync(appointment => appointment.Dentist, appointment => appointment.Patient, appointment => appointment.Room);
+            var all = await GetAllAsync(reservation => reservation.Coach, reservation => reservation.Member, reservation => reservation.Court);
+            return all.ToList();
+        }
+        public async Task<List<Reservation>> GetAllCourtsReservations()
+        {
+            // Retrieve appointments from the database
+            var all = await GetAllAsync(reservation => reservation.Member, reservation => reservation.Court);
             return all.ToList();
         }
 
-        public async Task<Appointment?> GetAppointmentById(int id)
+        public async Task<Reservation?> GetLessonsById(int id)
         {
             // Retrieve appointments from the database by user id.
-            return await GetByIdAsync(id, appointment => appointment.Dentist, appointment => appointment.Patient, appointment => appointment.Room);
+            return await GetByIdAsync(id, reservation => reservation.Coach, reservation => reservation.Member, reservation => reservation.Court);
         }
-
-        internal async Task<List<Room>> GetAllRooms()
+        public async Task<Reservation?> GetCourtsById(int id)
         {
-            return await context.Rooms.ToListAsync();
+            // Retrieve appointments from the database by user id.
+            return await GetByIdAsync(id, reservation => reservation.Member, reservation => reservation.Court);
         }
 
-        //public async Task<List<Treatment>> GetAllTreatmentsForAppointment(int appointmentId)
+        internal async Task<List<Court>> GetAllCourts()
+        {
+            return await context.Courts.ToListAsync();
+        }
+
+        //public Task<List<Reservation>> GetAllTreatments()
         //{
         //    // Retrieve treatments from the database including appointments
-        //    return await context.Treatments
-        //        .Where(t => t.Appointments.Any(a => a.Id == appointmentId))
-        //        .ToListAsync();
+        //    return context.Treatments.ToListAsync();
         //}
 
-        //public async Task<List<Appointment>> GetUserAppointments(Guid currentuserid)
-        //{
-        //    // Retrieve appointments from the database
-        //    return await context.Appointments.Where(u => u.PatientId == currentuserid).ToListAsync();
-        //}
-
-        //public async Task<List<Appointment>> GetDentistAppointments(Guid currentuserid)
-        //{
-        //    // Retrieve appointments from the database
-        //    return await context.Appointments.Where(u => u.DentistId == currentuserid).ToListAsync();
-        //}
-
-        public Task<List<Treatment>> GetAllTreatments()
-        {
-            // Retrieve treatments from the database including appointments
-            return context.Treatments.ToListAsync();
-        }
-
-        public async Task<List<User>> GetAllDentists()
+        public async Task<List<User>> GetAllCoaches()
         {
             // Retrieve dentists from the database
-            return await context.Users.Where(u => u.Groups.Any(g => g.Name == Group.GroupName.Dentist)).ToListAsync();
+            return await context.Users.Where(u => u.Groups.Any(g => g.Name == Group.GroupName.Coach)).ToListAsync();
         }
 
-        public async Task<List<User>> GetAllPatients()
+        public async Task<List<User>> GetAllMembers()
         {
             // Retrieve patients from the database
-            return await context.Users.Where(u => u.Groups.Any(g => g.Name == Group.GroupName.Patient)).ToListAsync();
+            return await context.Users.Where(u => u.Groups.Any(g => g.Name == Group.GroupName.Member)).ToListAsync();
         }
 
-        //public async Task CreateAppointment(CreateAppointmentViewModel model)
-        //{
-        //    // Create a new appointment based on the model data
-        //    Appointment appointment = new Appointment
-        //    {
-        //        //public Guid DentistId { get; set; }
-        //        //public User Dentist { get; set; }
-        //        //public Guid PatientId { get; set; }
-        //        //public User Patient { get; set; }
-        //        //public int RoomId { get; set; }
-        //        //public Room Room { get; set; }
-        //        //public DateTime DateTime { get; set; }
-        //        //public string Note { get; set; }
-        //        //public Collection<Treatment> Treatments { get; set; }
-        //        DentistId = model.DentistId,
-        //        PatientId = model.PatientId,
-        //        RoomId = model.RoomId,
-        //        DateTime = model.DateTime,
-
-
-        //    };
-
-        //    // Add the appointment to the database
-        //    context.Appointments.Add(appointment);
-        //    await context.SaveChangesAsync();
-        //}
-
-
-        public async Task<List<Appointment>> GetAppointmentByUser(string? id)
-        {
-            return await context.Appointments
-                .Where(a => a.DentistId == Guid.Parse(id) || a.PatientId == Guid.Parse(id))
-                .Include(a => a.Room)
-                .Include(a => a.Treatments)
-                .Include(a => a.Dentist)
-                .Include(a => a.Patient)
-                .ToListAsync();
-        }
-    }
+		internal async Task<List<Reservation>> GetLessonByUser(Guid? id)
+		{
+			return await context.Reservations
+						 .Where(a => a.MemberId == id)
+						 .Include(a => a.Court)
+						 .Include(a => a.Coach)
+						 .ToListAsync();
+		}
+		internal async Task<List<Reservation>> GetCourtsByUser(Guid? id)
+		{
+			return await context.Reservations
+						 .Where(a => a.MemberId == id)
+						 .Include(a => a.Court)
+						 .ToListAsync();
+		}
+	}
 }

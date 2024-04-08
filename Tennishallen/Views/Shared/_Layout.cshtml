@@ -1,30 +1,28 @@
-﻿@using Tennishallen.Services;
+﻿@using Tennishallen.Data.Services
+@using Tennishallen.Services;
 @using Tennishallen.Data.Models;
-
 
 @{
 	var token = this.Context.Request.Cookies["Token"];
-	var jwtService = new JwtService();
+	var jwtService = new JwtService(this.Context.Request);
 	bool isLoggedIn;
 	var userName = "";
 	bool isAdmin = false;
-	bool isAssistent = false;
-	bool isDentist = false;
-	bool isPatient = false;
+	bool isMember = false;
+	bool isCoach = false;
 
 
-	if (token == null || !jwtService.ValidateToken(token)) isLoggedIn = false;
+	if (token == null || !jwtService.ValidateToken()) isLoggedIn = false;
 	else isLoggedIn = true;
-	var group = new JwtService().GetUserGroups(token);
+	var group = new JwtService(this.Context.Request).GetUserGroups();
 
 	if (isLoggedIn)
 	{
-		userName = jwtService.GetUsername(token);
+		userName = new JwtService(this.Context.Request).GetUserName();
 
 		isAdmin = group.Contains(Group.GroupName.Admin);
-		isAssistent = group.Contains(Group.GroupName.Assistent);
-		isDentist = group.Contains(Group.GroupName.Dentist);
-		isPatient = group.Contains(Group.GroupName.Patient);
+		isMember = group.Contains(Group.GroupName.Member);
+		isCoach = group.Contains(Group.GroupName.Coach);
 	}
 	else
 	{
@@ -107,7 +105,7 @@
 										</a>
 									</li>
 
-									@if (isAdmin || isDentist || isAssistent)
+									@if (isAdmin || isMember || isCoach)
 									{
 										<li class="nav-item">
 											<a asp-area="" asp-controller="Appointment" class="nav-link align-middle px-0">
@@ -129,7 +127,7 @@
 											</a>
 										</li>
 									}
-									@if (isAdmin || isPatient)
+									@if (isAdmin || isMember)
 									{
 										<li class="nav-item">
 											<a asp-area="" asp-controller="Rating" class="nav-link px-0 align-middle">

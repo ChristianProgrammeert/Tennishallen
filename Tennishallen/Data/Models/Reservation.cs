@@ -8,9 +8,9 @@ namespace Tennishallen.Data.Models;
 public class Reservation : IBaseEntity<int>
 {
     [Key] public int Id { get; set; }
-    public Guid MemberId { get; set; }
+    public Guid? MemberId { get; set; }
     public User? Member{ get; set; }
-    public Guid CoachId { get; set; }
+    public Guid? CoachId { get; set; }
     public User? Coach { get; set; }
     public Guid CourtId { get; set; }
     public Court? Court { get; set; }

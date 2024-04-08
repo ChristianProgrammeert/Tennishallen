@@ -1,71 +1,71 @@
-﻿@model TandheelkundigCentrum.Data.Models.Appointment;
+﻿@model Tennishallen.Data.Models.Reservation;
 @{
-    ViewData["Title"] = "Afspraaknummer: " + Model.Id;
+	ViewData["Title"] = "Afspraaknummer: " + Model.Id;
 }
 <div>
-    <div class="d-flex flex-row justify-content-between">
-        <h1 class="display-4">Afspraaknummer: @Model.Id</h1>
-        <div class="d-flex align-items-center">
-            <a asp-action="Index">
-                <button type="button" class="btn btn-info">
-                    <i class="bi bi-houses"></i>
-                    Alle Afspraken
-                </button>
-            </a>
-            &ensp;
-            <a asp-action="Edit" asp-route-appointmentId="@Model.Id">
-                <button type="button" class="btn btn-warning">
-                    <i class="bi bi-pen"></i>
-                    Afspraak bewerken
-                </button>
-            </a>
-        </div>
-    </div>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Tandarts</th>
-                <th scope="col">Patient</th>
-                <th scope="col">Kamer</th>
-                <th scope="col">Datum</th>
-                <th scope="col">Notitie</th>
-                <th scope="col">Bewerk</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">
-                    <a asp-action="View" asp-route-id="@Model.Id">
-                        @Model.Id
-                    </a>
-                </th>
-                <td>
-                    @Model.Dentist.Fullname
-                </td>
-                <td>
-                    @Model.Patient.Fullname
-                </td>
-                <td>
-                    @Model.Room.Name
-                </td>
-                <td>
-                    @Model.DateTime
-                </td>
-                <td>
-                    @Model.Note
-                </td>
-                <td>
-                    <div class="d-flex flex-row float-end">
-                        <a asp-action="Edit" asp-route-appointmentId="@Model.Id">
-                            <button type="button" class="btn btn-warning">
-                                <i class="bi bi-pencil-square"></i>
-                                Bewerk
-                            </button>
-                        </a>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+	<div class="d-flex flex-row justify-content-between">
+		<h1 class="display-4">Afspraaknummer: @Model.Id</h1>
+		<div class="d-flex align-items-center">
+			<a asp-action="Index">
+				<button type="button" class="btn btn-info">
+					<i class="bi bi-houses"></i>
+					Alle Afspraken
+				</button>
+			</a>
+			&ensp;
+			<a asp-action="Edit" asp-route-appointmentId="@Model.Id">
+				<button type="button" class="btn btn-warning">
+					<i class="bi bi-pen"></i>
+					Afspraak bewerken
+				</button>
+			</a>
+		</div>
+	</div>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th scope="col">Id</th>
+				<th scope="col">Tandarts</th>
+				<th scope="col">Patient</th>
+				<th scope="col">Kamer</th>
+				<th scope="col">Datum</th>
+				<th scope="col">Notitie</th>
+				<th scope="col">Bewerk</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th scope="row">
+					<a asp-action="View" asp-route-id="@Model.Id">
+						@Model.Id
+					</a>
+				</th>
+				<td>
+					@Model.Coach.Fullname
+				</td>
+				<td>
+					@Model.Member.Fullname
+				</td>
+				<td>
+					@Model.Court.Name
+				</td>
+				@* <td>
+					@Model.DateTime
+				</td>
+				<td>
+					@Model.Note
+				</td> *@
+				<td>
+					<div class="d-flex flex-row float-end">
+						<a asp-action="Edit" asp-route-appointmentId="@Model.Id">
+							<button type="button" class="btn btn-warning">
+								<i class="bi bi-pencil-square"></i>
+								Bewerk
+							</button>
+						</a>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </div>

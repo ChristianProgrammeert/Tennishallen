@@ -28,8 +28,8 @@ public class User : IBaseEntity<Guid>
     public bool Active { get; set; }
     public double HourlyWage { get; set; }
 
-    public Collection<Reservation> MemberReservations { get; set; } = [];
-    public Collection<Reservation> CoachReservations { get; set; } = [];
+    public List<Reservation> MemberReservations { get; set; }
+    public List<Reservation> CoachReservations { get; set; }
     public List<Group> Groups { get; set; }
 
     [NotMapped]

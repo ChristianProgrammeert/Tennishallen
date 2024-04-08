@@ -1,4 +1,4 @@
-﻿@model List<TandheelkundigCentrum.Data.Models.Appointment>
+﻿@model List<Tennishallen.Data.Models.Reservation>
 @{
     ViewData["Title"] = "Dashboard";
 }
@@ -39,23 +39,20 @@
                         </a>
                     </th>
                     <td> 
-                        @appointment.Dentist.Fullname
+                        @appointment.Coach.Fullname
                     </td>
                     <td>
-                        @appointment.Patient.Fullname
+                        @appointment.Member.Fullname
                     </td>
                     <td>
-                        @appointment.Treatments.Aggregate("", (s, treatment) => s = $"{s}{treatment.Name}, ")
+                        @appointment.Court.Name
                     </td>
-                    <td>
-                        @appointment.Room.Name
-                    </td>
-                    <td>
+@*                     <td>
                         @appointment.DateTime
                     </td>
                     <td>
                         @appointment.Note
-                    </td>
+                    </td> *@
                     <td>
                         <div class="d-flex flex-row float-end">
                             <a asp-action="Edit" asp-route-appointmentId="@appointment.Id">

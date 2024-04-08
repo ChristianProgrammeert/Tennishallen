@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Tennishallen.Data.Models;
 
 namespace Tennishallen.Data.Base;
 

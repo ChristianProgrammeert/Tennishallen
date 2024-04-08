@@ -102,6 +102,13 @@ public class JwtService
         }
     }
     
+    public ClaimsPrincipal GetClaimsIdentity(string? token)
+    {
+        var jsonToken = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
+        var identity = new ClaimsIdentity(jsonToken?.Claims, "Bearer");
+        return new ClaimsPrincipal(identity);
+    }
+    
     /// <summary>
     /// Get the user id from the Token
     /// </summary>

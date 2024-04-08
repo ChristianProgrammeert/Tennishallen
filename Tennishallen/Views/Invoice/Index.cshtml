@@ -18,18 +18,18 @@
         <tbody>
             @foreach (var invoice in Model)
             {
-                <tr>
-                    <td scope="row">
-                        @invoice.FullName's Invoice - @invoice.Month/@invoice.Year
-                    </td>
-                    <td>
-                        <div class="d-flex flex-row">
-                            <a href="@Url.Action("ViewInvoice", "Invoice", new { invoiceId = invoice.InvoiceId })" class="btn btn-primary">
-                                View Invoice
-                            </a>
-                        </div>
-                    </td>
-                </tr>
+                @* <tr> *@
+                @*     <td scope="row"> *@
+                @*         @invoice.FullName's Invoice - @invoice.Month/@invoice.Year *@
+                @*     </td> *@
+                @*     <td> *@
+                @*         <div class="d-flex flex-row"> *@
+                @*             <a href="@Url.Action("ViewInvoice", "Invoice", new { invoiceId = invoice.InvoiceId })" class="btn btn-primary"> *@
+                @*                 View Invoice *@
+                @*             </a> *@
+                @*         </div> *@
+                @*     </td> *@
+                @* </tr> *@
             }
         </tbody>
     </table>

@@ -60,16 +60,16 @@ public class AuthController(ApplicationDbContext context) : Controller
     /// TODO: make debug mode only
     /// </summary>
     /// <returns></returns>
-    public async Task<IActionResult> WhoAmI()
-    {
-        var jwtService = new JwtService(Request);
-        if (!jwtService.ValidateToken())
-            return View();
-        var id = jwtService.GetUserId();
-        return id == null
-            ? View()
-            : View(await service.GetByIdAsync(id.Value));
-    }
+    //public async Task<IActionResult> WhoAmI()
+    //{
+    //    var jwtService = new JwtService(Request);
+    //    if (!jwtService.ValidateToken())
+    //        return View();
+    //    var id = jwtService.GetUserId();
+    //    return id == null
+    //        ? View()
+    //        : View(await service.GetByIdAsync(id.Value));
+    //}
 
     public IActionResult Register()
     {
@@ -119,5 +119,39 @@ public class AuthController(ApplicationDbContext context) : Controller
             Response.Cookies.Delete("Token");
         else
             Response.Cookies.Append("Token", new JwtService(user).Token!, cookieOptions);
+    }
+
+    public IActionResult Profile()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View("Profile", model);
+        }
+
+        var token = HttpContext.Request.Cookies["Token"];
+        var userId = new JwtService(token).GetUserId();
+        var user = await service.GetByIdAsync(userId.Value);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        if (!PasswordHasher.VerifyPassword(model.OldPassword, user.Password))
+        {
+            ModelState.AddModelError("OldPassword", "Incorrect old password");
+            return View("Profile", model);
+        }
+
+        user.Password = PasswordHasher.HashPassword(model.NewPassword);
+        await service.UpdateAsync(user);
+
+        return RedirectToAction("Index", "Home");
     }
 }

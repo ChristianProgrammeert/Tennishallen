@@ -80,9 +80,37 @@ namespace Tennishallen.Controllers
             return View(await reservationService.GetReservationsById(id));
         }
 
-        public IActionResult Edit()
-                {
-            throw new NotImplementedException();
+        /// <summary>
+        /// View edit page with the room with the given id, if id is given.
+        /// </summary>
+        public async Task<IActionResult> Edit(int appointmentId)
+        {
+            await fillViewBag();
+
+            Reservation? reservation = appointmentId == 0
+                ? null
+                : await reservationService.GetByIdAsync(appointmentId);
+            return View(reservation);
+        }
+
+        /// <summary>
+        /// When an edit is done, add it to the service when id is not set, else update the room with the given id.
+        /// Redirect to the view page of the new or updated room.
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> Edit(int appointmentId, Reservation reservation)
+        {
+            var userId = new JwtService(Request).GetUserId();
+
+            reservation.MemberId = userId.Value;
+            if (reservation.Id == 0 && appointmentId != 0)
+            {
+                reservation.Id = appointmentId;
+            }
+            reservation = appointmentId == 0
+                ? await reservationService.AddAsync(reservation)
+                : await reservationService.UpdateAsync(reservation);
+            return RedirectToAction("View", new { id = reservation.Id });
         }
     }
 }

@@ -40,6 +40,7 @@ namespace Tennishallen.Controllers
             ViewBag.Members = await reservationService.GetAllMembers();
             ViewBag.Coaches = await reservationService.GetAllCoaches();
             ViewBag.Courts = await reservationService.GetAllCourts();
+            ViewBag.Reservations = await reservationService.GetAllLessonsReservations();
         }
 
         public async Task<IActionResult> Create()

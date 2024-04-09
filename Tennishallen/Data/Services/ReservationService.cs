@@ -7,6 +7,7 @@ using Tennishallen.Data;
 using Tennishallen.Data.Base;
 using Tennishallen.Data.Models;
 using Tennishallen.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Tennishallen.Services
 {
@@ -16,7 +17,7 @@ namespace Tennishallen.Services
         public async Task<List<Reservation>> GetAllLessonsReservations()
         {
             // Retrieve appointments from the database
-            var all = await GetAllAsync(reservation => reservation.Coach, reservation => reservation.Member, reservation => reservation.Court);
+            var all = await GetAllAsync(reservation => reservation.Member, reservation => reservation.Court, r => r.Coach);
             return all.ToList();
         }
         public async Task<List<Reservation>> GetAllCourtsReservations()

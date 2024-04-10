@@ -67,7 +67,7 @@ public class ReservationController(ApplicationDbContext context) : Controller
         var userId = new JwtService(Request).GetUserId();
 
         model.MemberId = userId.Value;
-
+        model.Price = await reservationService.GetTotal(model);
         model = await reservationService.AddAsync(model);
 
         return RedirectToAction("View", new { id = model.Id });
@@ -133,6 +133,7 @@ public class ReservationController(ApplicationDbContext context) : Controller
 
         reservation.MemberId = userId.Value;
         if (reservation.Id == 0 && appointmentId != 0) reservation.Id = appointmentId;
+        reservation.Price = await reservationService.GetTotal(reservation);
         reservation = appointmentId == 0
             ? await reservationService.AddAsync(reservation)
             : await reservationService.UpdateAsync(reservation);

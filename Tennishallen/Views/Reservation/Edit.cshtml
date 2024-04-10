@@ -39,7 +39,7 @@
         <div class="form-group">
             <label for="Room">Veld:</label>
             <select asp-for="CourtId" class="form-control" id="CourtId">
-                <option value="">-- Selecteer Kamer --</option>
+                <option value="">-- Selecteer Tennisbaan --</option>
                 @foreach (Court court in ViewBag.Courts)
                 {
                     <option value="@court.Id">@court.Name</option>

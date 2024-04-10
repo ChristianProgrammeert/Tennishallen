@@ -93,7 +93,8 @@ public class User : IBaseEntity<Guid>
                     City = "Hengelo",
                     PostalCode = "1234TB",
                     Phone = $"06 {new Random().Next(10_000_000, 99_999_999)}",
-                    Active = true
+                    Active = true,
+                    HourlyWage = 25
                 });
             model.Entity<Group>().HasData(
                 new Group

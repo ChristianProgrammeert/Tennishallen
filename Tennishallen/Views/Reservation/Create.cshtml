@@ -1,12 +1,12 @@
 ﻿@using Tennishallen.Data.Models
 @model Tennishallen.Data.Models.Reservation
 @{
-    ViewData["Title"] = "Afspraak maken";
+    ViewData["Title"] = "Reservering Maken";
 }
 
 <div>
     <div class="d-flex flex-row justify-content-between">
-        <h1 class="display-4">Afspraak Toevoegen</h1>
+        <h1 class="display-4">Reservering Maken</h1>
         <div class="d-flex align-items-center">
             <a asp-action="Index">
                 <button type="button" class="btn btn-info">
@@ -39,7 +39,7 @@
         <div class="form-group">
             <label for="Room">Veld:</label>
             <select asp-for="CourtId" class="form-control" id="CourtId">
-                <option value="">-- Selecteer Kamer --</option>
+                <option value="">-- Selecteer Tennisbaan --</option>
                 @foreach (Court court in ViewBag.Courts)
                 {
                     <option value="@court.Id">@court.Name, @string.Format("\u20ac {0:N2}", court.Price)</option>

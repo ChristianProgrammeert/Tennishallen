@@ -31,7 +31,7 @@
                 <option>-- Selecteer Coach --</option>
                 @foreach (User coach in ViewBag.Coaches)
                 {
-                    <option value="@coach.Id">@coach.Fullname</option>
+                    <option value="@coach.Id">@coach.Fullname, @string.Format("\u20ac {0:N2}", coach.HourlyWage)</option>
                 }
             </select>
             <span asp-validation-for="CoachId" class="text-danger"></span>
@@ -42,7 +42,7 @@
                 <option value="">-- Selecteer Kamer --</option>
                 @foreach (Court court in ViewBag.Courts)
                 {
-                    <option value="@court.Id">@court.Name</option>
+                    <option value="@court.Id">@court.Name, @string.Format("\u20ac {0:N2}", court.Price)</option>
                 }
             </select>
             <span asp-validation-for="CourtId" class="text-danger"></span>
@@ -74,7 +74,7 @@
         var reservations = [
     @foreach (var reservation in ViewBag.Reservations)
     {
-        <text>{ CourtId: '@reservation.CourtId', CoachId: '@reservation.CoachId', Date: '@reservation.Date', Hour: @reservation.Hour }, </text>
+        @:{ CourtId: '@reservation.CourtId', CoachId: '@reservation.CoachId', Date: '@reservation.Date', Hour: @reservation.Hour }, 
     }
             ];
 

@@ -1,0 +1,146 @@
+﻿@using Tennishallen.Data.Models
+@model Tennishallen.Data.Models.Reservation
+@{
+    ViewData["Title"] = "Afspraak maken";
+}
+
+<div>
+    <div class="d-flex flex-row justify-content-between">
+        <h1 class="display-4">Afspraak Toevoegen</h1>
+        <div class="d-flex align-items-center">
+            <a asp-action="Index">
+                <button type="button" class="btn btn-info">
+                    <i class="bi bi-houses"></i>
+                    Alle Kamers
+                </button>
+            </a>
+        </div>
+    </div>
+    <form method="post">
+        <div class="form-group">
+            <label>Type afspraak:</label>
+            <select class="form-control" id="typeLesSelect">
+                <option>Afspraak met les</option>
+                <option value="null">Alleen baan reserveren</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="docentSelectWrapper">
+            <label>Docent:</label>
+            <select asp-for="CoachId" class="form-control" id="CoachId">
+                <option>-- Selecteer Coach --</option>
+                @foreach (User coach in ViewBag.Coaches)
+                {
+                    <option value="@coach.Id">@coach.Fullname</option>
+                }
+            </select>
+            <span asp-validation-for="CoachId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="Room">Veld:</label>
+            <select asp-for="CourtId" class="form-control" id="CourtId">
+                <option value="">-- Selecteer Kamer --</option>
+                @foreach (Court court in ViewBag.Courts)
+                {
+                    <option value="@court.Id">@court.Name</option>
+                }
+            </select>
+            <span asp-validation-for="CourtId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>Datum:</label>
+            <input asp-for="Date" class="form-control" type="date" id="dateInput" min="@DateTime.Today.ToString("yyyy-MM-dd")"/>
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>Tijd:</label>
+            <select asp-for="Hour" class="form-control" id="Hour">
+            </select>
+            <span asp-validation-for="Hour" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Maak Afspraak</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var typeLesSelect = document.getElementById('typeLesSelect');
+        var docentSelectWrapper = document.getElementById('docentSelectWrapper');
+        var dateInput = document.getElementById('dateInput');
+        var courtSelect = document.getElementById('CourtId');
+        var coachSelect = document.getElementById('CoachId');
+        var hourSelect = document.getElementById('Hour');
+        var reservations = [
+    @foreach (var reservation in ViewBag.Reservations)
+    {
+        <text>{ CourtId: '@reservation.CourtId', CoachId: '@reservation.CoachId', Date: '@reservation.Date', Hour: @reservation.Hour }, </text>
+    }
+            ];
+
+        var today = new Date().toISOString().split('T')[0];
+        dateInput.value = today;
+
+        typeLesSelect.addEventListener('change', function () {
+            if (typeLesSelect.value === 'null') {
+                docentSelectWrapper.style.display = 'none';
+                coachSelect.value = '-- Selecteer Coach --';
+            } else {
+                docentSelectWrapper.style.display = 'block';
+            }
+        });
+
+        function formatDate(date) {
+            var d = new Date(date);
+            var day = d.getDate();
+            var month = d.getMonth() + 1;
+            var year = d.getFullYear();
+            return day + '-' + month + '-' + year;
+        }
+
+        function fetchAvailableHours() {
+            var selectedDate = formatDate(dateInput.value); 
+            var selectedCourtId = courtSelect.value;
+            var selectedCoachId = coachSelect.value;
+            var availableHours = [];
+
+            for (var i = 9; i <= 21; i++) {
+                var isBooked = false;
+                for (var j = 0; j < reservations.length; j++) {
+                    var appointment = reservations[j];
+                    if (appointment.CourtId === selectedCourtId && appointment.Date === selectedDate && appointment.Hour === i) {
+                        isBooked = true;
+                        break;
+                    }   
+                    console.log(appointment.CoachId === selectedCoachId , appointment.Date === selectedDate , appointment.Hour === i);
+                    if (appointment.CoachId === selectedCoachId && appointment.Date === selectedDate && appointment.Hour === i) {
+                        isBooked = true;
+                        break;
+                    }
+                    
+                }
+
+                if (!isBooked) {
+                    availableHours.push(i);
+                }
+            }
+
+            hourSelect.innerHTML = '';
+
+            availableHours.forEach(function (hour) {
+                var option = document.createElement('option');
+                option.value = hour;
+                option.text = hour + ":00";
+                hourSelect.appendChild(option);
+            });
+        }
+
+        docentSelectWrapper.addEventListener('change', fetchAvailableHours);
+        dateInput.addEventListener('change', fetchAvailableHours);
+
+        courtSelect.addEventListener('change', fetchAvailableHours);
+        typeLesSelect.addEventListener('change', fetchAvailableHours);
+
+        fetchAvailableHours();
+    });
+</script>

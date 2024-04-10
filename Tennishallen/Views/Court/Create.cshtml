@@ -1,0 +1,35 @@
+@model Tennishallen.Models.Court.CourtViewModel
+
+@{
+    ViewBag.Title = "Nieuwe tennisbaan";
+    Layout = "_Layout";
+}
+
+
+<div class="col-sm-0 col-md-6 offset-sm-0 offset-md-3" xmlns="http://www.w3.org/1999/html">
+    <h1>Nieuwe tennisbaan</h1>
+
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" type="text">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Price" class="form-label"></label>
+            <input asp-for="Price" class="form-control" type="number">
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control" type="text"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <br>
+        <div class="form-group">
+            <input class="btn btn-outline-success float-end" type="submit" value="Voeg veld toe">
+        </div>
+    </form>
+</div>

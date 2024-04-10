@@ -1,0 +1,89 @@
+@using Tennishallen.Data.Services
+@using Tennishallen.Data.Models
+@model IEnumerable<Tennishallen.Data.Models.Court>
+
+@{
+    ViewBag.Title = "Tennisvelden";
+    Layout = "_Layout";
+    var usergroups = new JwtService(Context.Request).GetUserGroups() ?? [];
+}
+
+<div>
+    <div class="d-flex flex-row justify-content-between">
+        <h1 class="display-4">Velden</h1>
+        @if (usergroups.Contains(Group.GroupName.Admin))
+        {
+            <div class="d-flex align-items-center">
+                <a asp-action="Create">
+                    <button type="button" class="btn btn-success">
+                        <i class="bi bi-pin-map"></i>
+                        Baan Toevoegen
+                    </button>
+                </a>
+            </div>
+        }
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Tennisbaan</th>
+            <th scope="col">Beschrijving</th>
+            <th scope="col">Kosten</th>
+            @if (usergroups.Contains(Group.GroupName.Admin))
+            {
+                <th scope="col">
+                    <div class="d-flex flex-row float-end">
+                        Bewerk
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="d-flex flex-row float-end">
+                        Verwijder
+                    </div>
+                </th>
+            }
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var court in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="View" asp-route-id="@court.Id">
+                        @court.Name
+                    </a>
+                </td>
+                <td>
+                    @court.Description
+                </td>
+                <td>
+                    @($"\u20ac{court.Price:N2}") per uur
+                </td>
+                @if (usergroups.Contains(Group.GroupName.Admin))
+                {
+                    <td>
+                        <div class="d-flex flex-row float-end">
+                            <a asp-action="Edit" asp-route-id="@court.Id" asp->
+                                <button type="button" class="btn btn-warning">
+                                    <i class="bi bi-pencil-square"></i>
+                                    Bewerk
+                                </button>
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex flex-row float-end">
+                            <a asp-action="Delete" asp-route-id="@court.Id">
+                                <button type="button" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                    Verwijder
+                                </button>
+                            </a>
+                        </div>
+                    </td>
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

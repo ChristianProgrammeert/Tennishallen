@@ -1,0 +1,49 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Tennishallen.Data.Models
+@model HashSet<DateOnly>
+
+@{
+    ViewBag.Title = "Facturen";
+    Layout = "_Layout";
+    User user = ViewBag.user;
+
+
+    // Dit is hacky asfuck, so hacky i almost like it.
+    string[] months = [null, "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+}
+
+
+<div>
+    <div class="d-flex flex-row justify-content-between">
+        <h1 class="display-4">@user.Fullname's Facturen</h1>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Factuur</th>
+            <th scope="col">Datum</th>
+            <th scope="col">Bekijk</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var date in Model)
+        {
+            <tr>
+                <td>
+                    @user.Fullname's Factuur (@months[date.Month] / @date.Year)
+                </td>
+                <td>
+                    @months[date.Month] - @date.Year tot @months[date.Month + 1] - @date.Year
+                </td>
+                <td>
+                    <div class="d-flex flex-row">
+                        <a asp-action="View" asp-route-guid="@user.Id" asp-route-month="@date.ToString("MM-dd-yyyy")" class="btn btn-primary">
+                            Bekijk
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

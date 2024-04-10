@@ -1,49 +1,241 @@
-﻿<!DOCTYPE html>
+﻿@using Tennishallen.Data.Services;
+@using Tennishallen.Data.Models;
+
+
+@{
+	var token = this.Context.Request.Cookies["Token"];
+	var jwtService = new JwtService(token);
+	bool isLoggedIn;
+	var userName = "";
+	bool isAdmin = false;
+	bool isCoach = false;
+	bool isMember = false;
+
+
+	if (token == null || !jwtService.ValidateToken()) isLoggedIn = false;
+	else isLoggedIn = true;
+	var group = new JwtService(token).GetUserGroups();
+
+	if (isLoggedIn)
+	{
+		userName = jwtService.GetUserName();
+
+		isAdmin = group.Contains(Group.GroupName.Admin);
+		isCoach = group.Contains(Group.GroupName.Coach);
+		isMember = group.Contains(Group.GroupName.Member);
+	}
+	else
+	{
+		group = null;
+	}
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Tennishallen</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Tennishallen.styles.css" asp-append-version="true" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - Tennishallen Hengelo</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	<style scoped>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		.custom-bg {
+			background-color: #7B5DB9; /* indigo-500 */
+		}
+
+		.nav-link {
+			color: white;
+		}
+
+		.max-width-sidebar {
+			max-width: 250px !important;
+
+			@@media (max-width: 768px) {
+				max-width: 50px !important;
+			}
+		}
+
+		.sideBar-img {
+			max-width: 100px !important;
+			max-height: 100px !important;
+			object-fit: contain !important;
+
+			@@media (max-width: 768px) {
+				max-width: 40px !important;
+				max-height: 40px !important;
+			}
+		}
+
+		footer {
+			max-width: calc(100% - 250px);
+			margin-left: 250px;
+			background-color: #f8f9fa;
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			border-top: 1px solid #A9A9A9; /* Add border at the top */
+
+
+			@@media (max-width: 768px) {
+				max-width: calc(100% - 50px);
+				margin-left: 50px;
+			}
+		}
+
+		main {
+			margin-bottom: 150px; /* Adjust the margin-bottom to the height of the footer */
+		}
+
+		@@media (max-width: 768px) {
+			.collapsed-sidebar .d-sm-inline {
+				display: none !important;
+			}
+		}
+	</style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Tennishallen</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+	<header>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Tennishallen - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+		<nav>
+			<div class="container-fluid">
+				<div class="d-flex row flex-nowrap">
+					<div class="col-auto col-md-4 col-xl-3 px-sm-2 px-0 custom-bg fixed-top max-width-sidebar">
+						<div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 collapsed-sidebar">
+							<div class="d-flex justify-content-center align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none" style="width: 100%;">
+								<a asp-area="" asp-controller="Home" asp-action="Index" class="text-center">
+									<img src="~/assets/img/TennishallenLogo.png" alt="Tennishallen" class="img-fluid sideBar-img" />
+								</a>
+							</div>
+
+							<ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+								@if (isLoggedIn)
+								{
+									@if (isAdmin)
+									{
+										<li class="nav-item">
+											<a asp-area="" asp-controller="Court" asp-action="Index" class="nav-link px-0 align-middle">
+												<i class="bi bi-aspect-ratio"></i>
+												<span class="ms-1 d-sm-inline collapsed-text">Tennisbanen</span>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a asp-area="" asp-controller="User" asp-action="Create" class="nav-link px-0 align-middle">
+												<i class="bi bi-person-plus"></i>
+												<span class="ms-1 d-sm-inline collapsed-text">Gebruiker toevoegen</span>
+											</a>
+										</li>
+									}
+									@if (isMember || isCoach)
+									{
+										<li class="nav-item">
+											<a asp-area="" asp-controller="Reservation" asp-action="Index" class="nav-link align-middle px-0">
+												<i class="bi bi-calendar-event"></i>
+												<span class="ms-1 d-sm-inline collapsed-text">Reserveringen</span>
+											</a>
+										</li>
+									}
+									@if (isMember || isAdmin)
+									{
+										<li class="nav-item">
+											<a asp-area="" asp-controller="Invoice" asp-action="Index" class="nav-link px-0 align-middle">
+												<i class="bi bi-card-heading"></i>
+												<span class="ms-1 d-sm-inline collapsed-text">Facturen</span>
+											</a>
+										</li>
+									}
+								}
+								@if (!isLoggedIn)
+								{
+									<li class="nav-item">
+										<a asp-controller="Auth" asp-action="Login" class="nav-link px-0 align-middle">
+											<i class="bi bi-box-arrow-in-right"></i>
+											<span class="ms-1 d-sm-inline collapsed-text">Inloggen</span>
+										</a>
+									</li>
+									<li class="nav-item">
+										<a asp-controller="Auth" asp-action="Register" class="nav-link px-0 align-middle">
+											<i class="bi bi-box-arrow-in-right"></i>
+											<span class="ms-1 d-sm-inline collapsed-text">Registreren</span>
+										</a>
+									</li>
+								}
+							</ul>
+							@if (isLoggedIn)
+							{
+								<div class="dropdown pb-4">
+									<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+										<i width="30" height="30" class="bi bi-person-circle"></i>
+										<span class="d-none d-sm-inline mx-1">@userName</span>
+									</a>
+									<ul class="dropdown-menu dropdown-menu-dark text-black text-small shadow" aria-labelledby="dropdownUser1">
+										<li><a class="dropdown-item text-black" asp-controller="Auth" asp-action="Profile">Wachtwoord wijzigen</a></li>
+										<li><a class="dropdown-item text-black" asp-controller="Auth" asp-action="Logout">Uitloggen</a></li>
+									</ul>
+								</div>
+							}
+							<hr>
+						</div>
+					</div>
+					<main role="main" class="col py-3 offset-md-4 offset-xl-2">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col">
+									@RenderBody()
+								</div>
+							</div>
+						</div>
+					</main>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	<!-- Footer -->
+	<footer class="text-center text-lg-start bg-body-tertiary text-muted">
+		<section class="">
+			<div class="container text-center text-md-start">
+				<div class="row mt-3">
+					<div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+						<h6 class="text-uppercase fw-bold mb-4">
+							<i class="fas fa-gem me-3"></i>Openingstijden:
+						</h6>
+						<p>
+							<table>
+							<tr>
+								<td>Dag:</td>
+								<td></td>
+								<td>Tijd:</td>
+							</tr>
+							<tr>
+								<td>Maandag t/m Zondag</td>
+								<td></td>
+								<td>09:00 - 21:00</td>
+							</tr>
+							</table>
+						</p>
+					</div>
+					<div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0">
+						<h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+						<p>
+							<i class="bi bi-envelope"></i>
+							r.vandongen@tennishallenhengelo.nl
+						</p>
+						<p><i class="bi bi-telephone"></i>
+							0612345678</p>
+					</div>
+				</div>
+			</div>
+		</section>
+	</footer>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

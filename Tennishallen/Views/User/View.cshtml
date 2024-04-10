@@ -1,0 +1,83 @@
+@using Tennishallen.Data.Models
+@model Tennishallen.Data.Models.User
+
+@{
+    ViewBag.Title = Model.Fullname;
+    Layout = "_Layout";
+}
+
+<div >
+    <div class="d-flex flex-row justify-content-between">
+        <h1 class="display-4">@Model.Fullname</h1>
+
+        <div class="d-flex align-items-center">
+            <a asp-action="Index">
+                <button type="button" class="btn btn-info">
+                    <i class="bi bi-houses"></i>
+                    Alle Gebruikers
+                </button>
+            </a>
+            <a asp-action="Edit" asp-route-guid="@Model.Id">
+                <button type="button" class="btn btn-warning">
+                    <i class="bi bi-pen"></i>
+                    Gebruikers Bewerken
+                </button>
+            </a>
+        </div>
+    </div>
+    <table class="table table-striped">
+        <tbody>
+        <tr>
+            <td>Email</td>
+            <td>
+                @Model.Email
+            </td>
+        </tr>
+        <tr>
+            <td>Phone</td>
+            <td>@Model.Phone</td>
+        </tr>
+        <tr>
+            <td>Adres</td>
+            <td>@Model.Address</td>
+        </tr>
+        <tr>
+            <td>Postalcode</td>
+            <td>@Model.PostalCode</td>
+        </tr>
+        <tr>
+            <td>City</td>
+            <td>@Model.City</td>
+        </tr>
+        <tr>
+            <td>Birthdate</td>
+            <td>@Model.Birthdate</td>
+        </tr>
+        <tr>
+            <td>Active</td>
+            <td>
+                @if (Model.Active)
+                {
+                    <i class="bi text-success bi-check-circle-fill"></i>
+                }
+                else
+                {
+                    <i class="bi text-danger bi-x-circle-fill"></i>
+                }
+            </td>
+        </tr>
+        @if (Model.Groups.Any(group => group.Name == Group.GroupName.Coach))
+        {
+            <tr>
+                <td>Uurloon</td>
+                <td>@Model.HourlyWage</td>
+            </tr>
+        }
+        <tr>
+            <td>Groups</td>
+            <td>@Model.Groups.Aggregate(string.Empty, (s, group) => $"{group.Name}, {s}")</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>

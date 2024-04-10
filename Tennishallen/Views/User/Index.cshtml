@@ -1,0 +1,87 @@
+@model IEnumerable<Tennishallen.Data.Models.User>
+
+@{
+    ViewBag.Title = "Gebruikers";
+    Layout = "_Layout";
+}
+<div>
+    <div class="d-flex flex-row justify-content-between">
+        <h1 class="display-4">Gebruikers</h1>
+        <div class="d-flex align-items-center">
+            <a asp-action="Create">
+                <button type="button" class="btn btn-success">
+                    <i class="bi bi-pin-map"></i>
+                    Gebruiker Toevoegen
+                </button>
+            </a>
+        </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Naam</th>
+            <th scope="col">Email</th>
+            <th scope="col">Groups</th>
+            <th scope="col">Actief</th>
+            <th scope="col">
+                <div class="d-flex flex-row float-end">
+                    Bewerk
+                </div>
+            </th>
+            <th scope="col">
+                <div class="d-flex flex-row float-end">
+                    Verwijder
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="View" asp-route-id="@user.Id">
+                        @user.Fullname
+                    </a>
+                </td>
+                <td>
+                    @user.Email
+                </td>
+                <td>
+                    @user.Groups.Aggregate(string.Empty, (s, group) => $"{s}{group.Name}, ")
+                </td>
+                <td>
+                    @if (user.Active)
+                    {
+                        <i class="bi text-success bi-check-circle-fill"></i>
+                    }
+                    else
+                    {
+                        <i class="bi text-danger bi-x-circle-fill"></i>
+                    }
+                </td>
+                <td>
+                    <div class="d-flex flex-row float-end">
+                        <a asp-action="Edit" asp-route-guid="@user.Id" asp->
+                            <button type="button" class="btn btn-warning">
+                                <i class="bi bi-pencil-square"></i>
+                                Bewerk
+                            </button>
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex flex-row float-end">
+                        <a asp-action="Delete" asp-route-id="@user.Id">
+                            <button type="button" class="btn btn-danger">
+                                <i class="bi bi-trash"></i>
+                                Verwijder
+                            </button>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

@@ -31,12 +31,11 @@ public class Reservation : IBaseEntity<int>
             .WithMany(u => u.CoachReservations)
             .HasForeignKey(a => a.CoachId)
             .OnDelete(DeleteBehavior.NoAction);
-
-
+        
         model.Entity<Reservation>()
             .HasOne(r => r.Court)
-            .WithMany(c => c.Reservations)
-            .HasForeignKey(r => r.CourtId)
+            .WithMany(u => u.Reservations)
+            .HasForeignKey(a => a.CourtId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

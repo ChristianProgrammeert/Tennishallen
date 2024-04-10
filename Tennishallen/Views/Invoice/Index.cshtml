@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Tennishallen.Data.Models.User>
+
+@{
+    ViewData["Title"] = "Facturen";
+}
+
+<div>
+    <div class="d-flex flex-row justify-content-between">
+        <h1 class="display-4">Facturen</h1>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Factuur</th>
+            <th scope="col">Telefoon</th>
+            <th scope="col">Bekijk</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>
+                    @user.Fullname's Facturen
+                </td>
+                <td>
+                    @user.Phone
+                </td>
+                <td>
+                    <div class="d-flex flex-row">
+                        <a asp-action="User" asp-route-guid="@user.Id" class="btn btn-primary">
+                            Bekijk
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

@@ -8,12 +8,12 @@ public class RegisterViewModel
 {
     
     [Required(ErrorMessage = "Dit veld is verplicht")]
-    [EmailAddress(ErrorMessage = "Dit is geen valide email")]
+    [EmailAddress(ErrorMessage = "Dit is geen geldig email")]
     [DisplayName("Email")]
     public string Email { get; set; }
 
     [Required(ErrorMessage = "Dit veld is verplicht")]
-    [Phone(ErrorMessage = "Dit is geen valide telefoon nummer")]
+    [Phone(ErrorMessage = "Dit is geen geldig telefoon nummer")]
     [DisplayName("Telefoon nummer")]
 
     public string Phone { get; set; }
@@ -48,7 +48,7 @@ public class RegisterViewModel
 
     [Required(ErrorMessage = "Geboortedatum is verplicht")]
     [DataType(DataType.Date)]
-    [DateBeforeToday(ErrorMessage = "Geboortedatum moet voor vandaag zijn")]
+    [DateBeforeToday(ErrorMessage = "Geboortedatum mag niet vandaag zijn of in de toekomst liggen")]
     [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
     [Display(Name = "Geboortedatum")]
     public DateTime Birthdate { get; set; }

@@ -38,7 +38,7 @@
                 </td>
                 <td>
                     <div class="d-flex flex-row">
-                        <a asp-action="View" asp-route-guid="@user.Id" asp-route-month="@date" class="btn btn-primary">
+                        <a asp-action="View" asp-route-guid="@user.Id" asp-route-month="@date.ToString("MM-dd-yyyy")" class="btn btn-primary">
                             Bekijk
                         </a>
                     </div>

@@ -13,7 +13,7 @@ using Tennishallen.Data.Utils;
 
 namespace Tennishallen.Controllers
 {
-    [AuthFilter(Group.GroupName.Admin, Group.GroupName.Member)]
+    [AuthFilter(Group.GroupName.Admin, Group.GroupName.Coach, Group.GroupName.Member)]
     public class ReservationController(ApplicationDbContext context) : Controller
     {
         ReservationService reservationService = new(context);

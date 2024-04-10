@@ -64,12 +64,13 @@ namespace Tennishallen.Services
 		internal async Task<List<Reservation>> GetLessonByUser(Guid? id)
 		{
 			return await context.Reservations
-						 .Where(a => a.MemberId == id)
+						 .Where(a => a.MemberId == id || a.CoachId == id)
 						 .Include(a => a.Court)
 						 .Include(a => a.Coach)
                          .Include(a => a.Member)
 						 .ToListAsync();
 		}
+
 		internal async Task<List<Reservation>> GetCourtsByUser(Guid? id)
 		{
 			return await context.Reservations

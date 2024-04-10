@@ -23,19 +23,21 @@ namespace Tennishallen.Controllers
             if (!jwt.ValidateToken()) return RedirectToAction("Login", "Auth");
             if (jwt.GetUserGroups()!.Contains(Group.GroupName.Admin))
                 return View(await authService.GetAllAsync());
-            return await User(jwt.GetUserId()!.Value);
+            return RedirectToAction("User", new { guid = jwt.GetUserId()!.Value });
         }
 
         public async Task<IActionResult> User(Guid guid)
         {
-            ViewBag.user = await authService.GetByIdAsync(guid);
+            var user = await authService.GetByIdAsync(guid); //FIXME: Can be done inline. :)
+            ViewBag.user = user;
             return View(await invoiceService.GetUserInvoiceDateTimes(guid));
         }
         
         public async Task<IActionResult> View(Guid guid, DateOnly month)
         {
             ViewBag.user = await authService.GetByIdAsync(guid);
-            return View(await invoiceService.GetUserReservationsByMonth(guid, month));
+            var reservation = await invoiceService.GetUserReservationsByMonth(guid, month);
+            return View(reservation);
 
         }
     }

@@ -10,7 +10,7 @@ public class DateBeforeToday : ValidationAttribute
 {
 
     public DateBeforeToday() 
-        : base($"Datum mag niet later zijn vandaag")
+        : base($"Datum mag niet later zijn dan vandaag")
     {
     }
 

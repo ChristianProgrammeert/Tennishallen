@@ -13,7 +13,7 @@ public class CourtController(ApplicationDbContext context) : Controller
 
 
     /// <summary>
-    /// Show all Courts
+    ///     Show all Courts
     /// </summary>
     /// <returns></returns>
     public async Task<IActionResult> Index()
@@ -22,7 +22,7 @@ public class CourtController(ApplicationDbContext context) : Controller
     }
 
     /// <summary>
-    /// View a specific Court
+    ///     View a specific Court
     /// </summary>
     /// <param name="id">The id of the court to show.</param>
     /// <returns></returns>
@@ -35,7 +35,7 @@ public class CourtController(ApplicationDbContext context) : Controller
 
 
     /// <summary>
-    /// Setup a CourtViewModel to create or update a court
+    ///     Setup a CourtViewModel to create or update a court
     /// </summary>
     /// <returns></returns>
     [AuthFilter(Group.GroupName.Admin)]
@@ -46,8 +46,8 @@ public class CourtController(ApplicationDbContext context) : Controller
 
 
     /// <summary>
-    /// Save or update the new court and redirect to the view
-    /// if the model is invalid show the problems to the user
+    ///     Save or update the new court and redirect to the view
+    ///     if the model is invalid show the problems to the user
     /// </summary>
     /// <param name="model">The model of the new court</param>
     /// <returns></returns>
@@ -75,7 +75,7 @@ public class CourtController(ApplicationDbContext context) : Controller
     }
 
     /// <summary>
-    /// Delete the court
+    ///     Delete the court
     /// </summary>
     /// <param name="id">The id of the court to delete</param>
     /// <returns></returns>
@@ -94,9 +94,9 @@ public class CourtController(ApplicationDbContext context) : Controller
         return RedirectToAction("Index");
     }
 
-    
+
     /// <summary>
-    /// Start editing the court with the given id
+    ///     Start editing the court with the given id
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -111,13 +111,13 @@ public class CourtController(ApplicationDbContext context) : Controller
                 Id = id,
                 Name = court.Name,
                 Price = court.Price,
-                Description = court.Description,
+                Description = court.Description
             }
         );
     }
-    
+
     /// <summary>
-    /// Update the court with the given id with values in model
+    ///     Update the court with the given id with values in model
     /// </summary>
     /// <param name="id">the id of the court to update</param>
     /// <param name="model">the model with the values to update</param>
@@ -134,7 +134,7 @@ public class CourtController(ApplicationDbContext context) : Controller
             Description = model.Description,
             Price = model.Price
         };
-        
+
         try
         {
             court = await courtService.UpdateAsync(court);
@@ -145,6 +145,5 @@ public class CourtController(ApplicationDbContext context) : Controller
         }
 
         return RedirectToAction("View", court.Id);
-        
     }
 }

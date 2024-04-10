@@ -7,12 +7,23 @@ namespace Tennishallen.Data.Services;
 
 public class JwtService
 {
-
-    public readonly string? Token;
     private static readonly JwtSecurityTokenHandler TokenHandler = new();
 
     /// <summary>
-    /// Construct JwtService from the token contained in a HttpRequest cookies.
+    ///     How lng it takes for a token to expire.
+    /// </summary>
+    private static readonly TimeSpan ExpireTimeSpan = TimeSpan.FromMinutes(20);
+
+    /// <summary>
+    ///     The secret key of the token;
+    ///     TODO: move to appsettings.json
+    /// </summary>
+    private static readonly byte[] SecretKey = "A-VERY-SAFE-SECRET-KEY-THATS-TOTALLY-NOT-PREDICTABLE"u8.ToArray();
+
+    public readonly string? Token;
+
+    /// <summary>
+    ///     Construct JwtService from the token contained in a HttpRequest cookies.
     /// </summary>
     /// <param name="request">The Request to take the cookies of.</param>
     public JwtService(HttpRequest request)
@@ -20,9 +31,9 @@ public class JwtService
         Token = request.Cookies["Token"];
     }
 
-    
+
     /// <summary>
-    /// Construct JwtService directly from a token;
+    ///     Construct JwtService directly from a token;
     /// </summary>
     /// <param name="token">The token to generate JwtService from.</param>
     public JwtService(string token)
@@ -31,7 +42,7 @@ public class JwtService
     }
 
     /// <summary>
-    /// Construct the JwtService based on a user.
+    ///     Construct the JwtService based on a user.
     /// </summary>
     /// <param name="user">The user to base JwtService on.</param>
     public JwtService(User user)
@@ -40,17 +51,7 @@ public class JwtService
     }
 
     /// <summary>
-    /// How lng it takes for a token to expire.
-    /// </summary>
-    private static readonly TimeSpan ExpireTimeSpan = TimeSpan.FromMinutes(20);
-    /// <summary>
-    /// The secret key of the token;
-    /// TODO: move to appsettings.json
-    /// </summary>
-    private static readonly byte[] SecretKey = "A-VERY-SAFE-SECRET-KEY-THATS-TOTALLY-NOT-PREDICTABLE"u8.ToArray();
-    
-    /// <summary>
-    /// Generate a JWT token that holds user claims.
+    ///     Generate a JWT token that holds user claims.
     /// </summary>
     /// <param name="user">The user to take the claims from.</param>
     /// <returns>The token of the user.</returns>
@@ -63,21 +64,21 @@ public class JwtService
                     new Claim(ClaimTypes.Name, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email),
                     new Claim(ClaimTypes.GivenName, user.Fullname),
-                    .. user.Groups.Select(g => new Claim(ClaimTypes.Role, g.Name.ToString())).ToList(),
+                    .. user.Groups.Select(g => new Claim(ClaimTypes.Role, g.Name.ToString())).ToList()
                 ]
             ),
             Expires = DateTime.UtcNow + ExpireTimeSpan,
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(SecretKey),
                 SecurityAlgorithms.HmacSha256Signature
-            ),
+            )
         };
         var token = TokenHandler.CreateToken(tokenDescriptor);
         return TokenHandler.WriteToken(token);
     }
 
     /// <summary>
-    /// Validate a JWT token.
+    ///     Validate a JWT token.
     /// </summary>
     /// <returns>True if the token is valid.</returns>
     public bool ValidateToken()
@@ -91,7 +92,7 @@ public class JwtService
                 IssuerSigningKey = new SymmetricSecurityKey(SecretKey),
                 ValidateIssuer = false,
                 ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero,
+                ClockSkew = TimeSpan.Zero
             }, out _);
 
             return true;
@@ -101,9 +102,9 @@ public class JwtService
             return false;
         }
     }
-    
+
     /// <summary>
-    /// Get the claims identity from the token
+    ///     Get the claims identity from the token
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>
@@ -113,9 +114,9 @@ public class JwtService
         var identity = new ClaimsIdentity(jsonToken?.Claims, "Bearer");
         return new ClaimsPrincipal(identity);
     }
-    
+
     /// <summary>
-    /// Get the user id from the Token
+    ///     Get the user id from the Token
     /// </summary>
     /// <returns>The user id in the token or null</returns>
     public Guid? GetUserId()
@@ -123,12 +124,12 @@ public class JwtService
         if (!ValidateToken()) return null;
         var jsonToken = TokenHandler.ReadToken(Token) as JwtSecurityToken;
         var nameClaim = jsonToken?.Claims.FirstOrDefault(c => c.Type == "unique_name");
-        if (nameClaim == null) return null; 
+        if (nameClaim == null) return null;
         return Guid.Parse(nameClaim.Value);
     }
-    
+
     /// <summary>
-    /// The email contained in the token
+    ///     The email contained in the token
     /// </summary>
     /// <returns>The users email in the token or null</returns>
     public string? GetUserEmail()
@@ -140,7 +141,7 @@ public class JwtService
     }
 
     /// <summary>
-    /// The full name contained in the token
+    ///     The full name contained in the token
     /// </summary>
     /// <returns>The users Full Name in the token or null</returns>
     public string? GetUserName()
@@ -152,7 +153,7 @@ public class JwtService
     }
 
     /// <summary>
-    /// The groups contained in the token
+    ///     The groups contained in the token
     /// </summary>
     /// <returns>The users groups in the token or null</returns>
     public IEnumerable<Group.GroupName>? GetUserGroups()

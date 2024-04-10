@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +9,6 @@ namespace Tennishallen.Data.Models;
 [Index(nameof(Email), IsUnique = true)]
 public class User : IBaseEntity<Guid>
 {
-    [Key] public Guid Id { get; set; }
-
     public string Email { get; set; }
     public string Phone { get; set; }
 
@@ -33,15 +30,13 @@ public class User : IBaseEntity<Guid>
     public List<Reservation> CoachReservations { get; set; }
     public List<Group> Groups { get; set; }
 
-    [NotMapped]
-    public List<Reservation> Reservations
-    {
-        get => [.. MemberReservations ?? [], .. CoachReservations ?? []];
-    }
-    
-    
+    [NotMapped] public List<Reservation> Reservations => [.. MemberReservations ?? [], .. CoachReservations ?? []];
+
+    [Key] public Guid Id { get; set; }
+
+
     /// <summary>
-    /// Create relations and default users
+    ///     Create relations and default users
     /// </summary>
     /// <param name="model">The model to expand on</param>
     internal static void OnModelCreating(ModelBuilder model)
@@ -66,21 +61,21 @@ public class User : IBaseEntity<Guid>
                 City = "Hengelo",
                 PostalCode = "1234TB",
                 Phone = "06 12345678",
-                Active = true,
+                Active = true
             });
         model.Entity<Group>().HasData(
             new Group
             {
                 Id = 1,
                 UserId = guid,
-                Name = Group.GroupName.Admin,
+                Name = Group.GroupName.Admin
             });
         string[][] names =
         [
             ["Beck", "Hand"],
             ["Grant", "Slam"],
             ["Tehn", "Ishbahl"],
-            ["Courtney", "Racket"],
+            ["Courtney", "Racket"]
         ];
         for (var i = 0; i < names.Length; i++)
         {
@@ -98,14 +93,14 @@ public class User : IBaseEntity<Guid>
                     City = "Hengelo",
                     PostalCode = "1234TB",
                     Phone = $"06 {new Random().Next(10_000_000, 99_999_999)}",
-                    Active = true,
+                    Active = true
                 });
             model.Entity<Group>().HasData(
                 new Group
                 {
                     Id = i + 2,
                     UserId = guid,
-                    Name = Group.GroupName.Coach,
+                    Name = Group.GroupName.Coach
                 });
         }
     }

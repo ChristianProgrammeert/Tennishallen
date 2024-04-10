@@ -1,14 +1,13 @@
-@using Tennishallen.Data.Services
-@using Tennishallen.Data.Models
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Tennishallen.Data.Models
 @model HashSet<DateOnly>
 
 @{
     ViewBag.Title = "Facturen";
     Layout = "_Layout";
     User user = ViewBag.user;
-    
-    
+
+
     // Dit is hacky asfuck, so hacky i almost like it.
     string[] months = [null, "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 }

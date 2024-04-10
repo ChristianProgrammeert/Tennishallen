@@ -1,6 +1,4 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Tennishallen.Data;
 using Tennishallen.Data.Models;
 using Tennishallen.Data.Services;
@@ -11,10 +9,10 @@ namespace Tennishallen.Controllers;
 
 public class AuthController(ApplicationDbContext context) : Controller
 {
-    private AuthService service = new(context);
+    private readonly AuthService service = new(context);
 
     /// <summary>
-    /// Show the user the login page. if user is logged in redirect to home.
+    ///     Show the user the login page. if user is logged in redirect to home.
     /// </summary>
     public IActionResult Login()
     {
@@ -25,8 +23,8 @@ public class AuthController(ApplicationDbContext context) : Controller
 
 
     /// <summary>
-    /// Login the user if the model is valid else show the login page with the problems.
-    /// When logged in redirect to home page
+    ///     Login the user if the model is valid else show the login page with the problems.
+    ///     When logged in redirect to home page
     /// </summary>
     /// <param name="loginViewModel">The login model that should be valid.</param>
     [HttpPost]
@@ -46,7 +44,7 @@ public class AuthController(ApplicationDbContext context) : Controller
 
 
     /// <summary>
-    /// Logout the user
+    ///     Logout the user
     /// </summary>
     public IActionResult Logout()
     {
@@ -54,20 +52,20 @@ public class AuthController(ApplicationDbContext context) : Controller
         return RedirectToAction("Login");
     }
 
-    
+
     /// <summary>
-    /// Show the user a register form
+    ///     Show the user a register form
     /// </summary>
     /// <returns></returns>
     public IActionResult Register()
     {
         return View(new RegisterViewModel());
     }
-    
-    
+
+
     /// <summary>
-    /// Register the user when all values are valid and log them in
-    /// if model is not valid show the register form with the problems
+    ///     Register the user when all values are valid and log them in
+    ///     if model is not valid show the register form with the problems
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
@@ -91,9 +89,9 @@ public class AuthController(ApplicationDbContext context) : Controller
             City = model.City,
             Birthdate = DateOnly.FromDateTime(model.Birthdate),
             Active = true,
-            Groups = [],
+            Groups = []
         };
-        user.Groups.Add(new Group { User = user,  Name = Group.GroupName.Member });
+        user.Groups.Add(new Group { User = user, Name = Group.GroupName.Member });
         try
         {
             await service.AddAsync(user);
@@ -104,12 +102,12 @@ public class AuthController(ApplicationDbContext context) : Controller
             return View(model);
         }
 
-        return await Login(new LoginViewModel { Email = model.Email, Password = model.Password});
+        return await Login(new LoginViewModel { Email = model.Email, Password = model.Password });
     }
 
-    
+
     /// <summary>
-    /// Set the session cookie 'token'
+    ///     Set the session cookie 'token'
     /// </summary>
     /// <param name="user">The user to generte the token from</param>
     private void SetTokenCookie(User? user)
@@ -122,7 +120,7 @@ public class AuthController(ApplicationDbContext context) : Controller
     }
 
     /// <summary>
-    /// Show the user their profile
+    ///     Show the user their profile
     /// </summary>
     /// <returns></returns>
     public IActionResult Profile()
@@ -131,26 +129,20 @@ public class AuthController(ApplicationDbContext context) : Controller
     }
 
     /// <summary>
-    /// Change the password of the user that currently logged in
+    ///     Change the password of the user that currently logged in
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
     {
-        if (!ModelState.IsValid)
-        {
-            return View("Profile", model);
-        }
+        if (!ModelState.IsValid) return View("Profile", model);
 
         var token = HttpContext.Request.Cookies["Token"];
         var userId = new JwtService(token).GetUserId();
         var user = await service.GetByIdAsync(userId.Value);
 
-        if (user == null)
-        {
-            return NotFound();
-        }
+        if (user == null) return NotFound();
 
         if (!PasswordHasher.VerifyPassword(model.OldPassword, user.Password))
         {

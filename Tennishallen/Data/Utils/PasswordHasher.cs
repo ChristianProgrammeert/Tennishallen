@@ -3,7 +3,7 @@ namespace Tennishallen.Data.Utils;
 public class PasswordHasher
 {
     /// <summary>
-    /// Hash a password using BCrypt.
+    ///     Hash a password using BCrypt.
     /// </summary>
     /// <param name="raw">The raw unhashed password.</param>
     /// <returns>A Bcrypt hash of raw.</returns>
@@ -13,7 +13,7 @@ public class PasswordHasher
     }
 
     /// <summary>
-    /// Verify a raw password against a hash.
+    ///     Verify a raw password against a hash.
     /// </summary>
     /// <param name="raw">The raw unhashed password.</param>
     /// <param name="password">The hashed password.</param>

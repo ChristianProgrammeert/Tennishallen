@@ -1,11 +1,11 @@
 @using Tennishallen.Data.Services
 @using Tennishallen.Data.Models
-@model System.Collections.Generic.IEnumerable<Tennishallen.Data.Models.Court>
+@model IEnumerable<Tennishallen.Data.Models.Court>
 
 @{
     ViewBag.Title = "Tennisvelden";
     Layout = "_Layout";
-    var usergroups = new JwtService(this.Context.Request).GetUserGroups() ?? [];
+    var usergroups = new JwtService(Context.Request).GetUserGroups() ?? [];
 }
 
 <div>

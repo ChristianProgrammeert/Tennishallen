@@ -1,12 +1,12 @@
-@using Tennishallen.Data.Services
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Tennishallen.Data.Services
 @using Tennishallen.Data.Models
 @model Tennishallen.Data.Models.Court
 
 @{
     ViewBag.Title = Model.Name;
     Layout = "_Layout";
-    var usergroups = new JwtService(this.Context.Request).GetUserGroups() ?? [];
+    var usergroups = new JwtService(Context.Request).GetUserGroups() ?? [];
 }
 
 <div >
@@ -38,7 +38,7 @@
         <tr>
             <td>Prijs per uur</td>
             <td>
-                @string.Format("\u20ac {0:N2}", @Model.Price) per uur
+                @string.Format("\u20ac {0:N2}", Model.Price) per uur
             </td>
         </tr>
         <tr>
@@ -47,5 +47,5 @@
         </tr>
         </tbody>
     </table>
-    
+
 </div>

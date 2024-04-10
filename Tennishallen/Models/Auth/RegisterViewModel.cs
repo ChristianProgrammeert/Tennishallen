@@ -6,7 +6,6 @@ namespace Tennishallen.Models.Auth;
 
 public class RegisterViewModel
 {
-    
     [Required(ErrorMessage = "Dit veld is verplicht")]
     [EmailAddress(ErrorMessage = "Dit is geen geldig email")]
     [DisplayName("Email")]
@@ -32,7 +31,7 @@ public class RegisterViewModel
     [Display(Name = "Achternaam")]
     public string LastName { get; set; }
 
-    [Display(Name = "Adres")] 
+    [Display(Name = "Adres")]
     [Required(ErrorMessage = "Adres is verplicht")]
 
     public string Address { get; set; }

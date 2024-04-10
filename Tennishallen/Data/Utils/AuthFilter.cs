@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Tennishallen.Data.Models;
@@ -8,14 +7,13 @@ namespace Tennishallen.Data.Utils;
 
 public class AuthFilter(params Group.GroupName[] groups) : ActionFilterAttribute
 {
-    
-    private string[] allowedPaths =
+    private readonly string[] allowedPaths =
     [
-        "/auth/login",
+        "/auth/login"
     ];
 
     /// <summary>
-    /// When user is not logged in with the right role redirect them to the login page or show the unauthorized package
+    ///     When user is not logged in with the right role redirect them to the login page or show the unauthorized package
     /// </summary>
     /// <param name="context"></param>
     public override void OnActionExecuting(ActionExecutingContext context)
@@ -26,7 +24,7 @@ public class AuthFilter(params Group.GroupName[] groups) : ActionFilterAttribute
             !service.ValidateToken())
         {
             if (allowedPaths.All(s => s != context.HttpContext.Request.Path))
-                context.HttpContext.Response.Redirect($"/Auth/Login/");
+                context.HttpContext.Response.Redirect("/Auth/Login/");
             return;
         }
 

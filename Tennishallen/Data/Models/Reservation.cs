@@ -1,15 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using Tennishallen.Data.Base;
-using Tennishallen.Data.Models;
 
 namespace Tennishallen.Data.Models;
 
 public class Reservation : IBaseEntity<int>
 {
-    [Key] public int Id { get; set; }
     public Guid MemberId { get; set; }
-    public User Member{ get; set; }
+    public User Member { get; set; }
     public Guid? CoachId { get; set; }
     public User? Coach { get; set; }
     public int CourtId { get; set; }
@@ -17,10 +15,11 @@ public class Reservation : IBaseEntity<int>
     public double Price { get; set; }
     public DateOnly Date { get; set; }
     public int Hour { get; set; }
+    [Key] public int Id { get; set; }
 
-    
+
     /// <summary>
-    /// Set the relations of Resrvation
+    ///     Set the relations of Resrvation
     /// </summary>
     /// <param name="model">the model to create the raltions on</param>
     internal static void OnModelCreating(ModelBuilder model)
@@ -36,7 +35,7 @@ public class Reservation : IBaseEntity<int>
             .WithMany(u => u.CoachReservations)
             .HasForeignKey(a => a.CoachId)
             .OnDelete(DeleteBehavior.NoAction);
-        
+
         model.Entity<Reservation>()
             .HasOne(r => r.Court)
             .WithMany(u => u.Reservations)

@@ -1,5 +1,5 @@
 @using Tennishallen.Data.Models
-@model System.Collections.Generic.List<Tennishallen.Data.Models.Reservation>
+@model List<Tennishallen.Data.Models.Reservation>
 
 @{
     User user = ViewBag.user;
@@ -51,16 +51,16 @@ else
                         <div class="col-12 col-sm-6 col-md-4">
                             <h4 class="row">
                                 <span class="col-6">Invoice #</span>
-                                <span class="col-6 text-sm-end">@user.Id.GetHashCode().ToString().Substring(0,4)@Model.First().Date.Month@Model.First().Date.Year</span>
+                                <span class="col-6 text-sm-end">@user.Id.GetHashCode().ToString().Substring(0, 4)@Model.First().Date.Month@Model.First().Date.Year</span>
                             </h4>
                             <div class="row">
                                 <span class="col-6">Account</span>
                                 <span class="col-6 text-sm-end">@user.Id.ToString().Split('-')[0]</span>
                                 <span class="col-6">Order ID</span>
-                                <span class="col-6 text-sm-end">@user.Id.GetHashCode().ToString().Substring(0,4)@Model.First().Date.Month@Model.First().Date.Year</span>
+                                <span class="col-6 text-sm-end">@user.Id.GetHashCode().ToString().Substring(0, 4)@Model.First().Date.Month@Model.First().Date.Year</span>
                                 <span class="col-6">Factuur Datum</span>
                                 <span class="col-6 text-sm-end">1/@Model.First().Date.Month/@Model.First().Date.Year</span>
-                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -85,6 +85,18 @@ else
                                             <td class="text-end">@reservation.Price</td>
                                         </tr>
                                     }
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td></td>
+                                        <td class="text-end"></td>
+                                        <td class="text-end"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Totaal</th>
+                                        <td></td>
+                                        <td class="text-end"></td>
+                                        <td class="text-end">@Model.Aggregate(0d, (total, reservation) => total + reservation.Price)</td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>

@@ -1,5 +1,5 @@
 ﻿@using Tennishallen.Data.Models
-@model Tennishallen.Data.Models.Reservation
+@model Reservation
 @{
     ViewData["Title"] = "Afspraak Bewerken";
 }
@@ -31,7 +31,7 @@
                 <option>-- Selecteer Coach --</option>
                 @foreach (User coach in ViewBag.Coaches)
                 {
-                    <option value="@coach.Id">@coach.Fullname, @string.Format("\u20ac {0:N2}", coach.HourlyWage)</option>
+                    <option value="@coach.Id">@coach.Fullname</option>
                 }
             </select>
             <span asp-validation-for="CoachId" class="text-danger"></span>
@@ -42,14 +42,14 @@
                 <option value="">-- Selecteer Kamer --</option>
                 @foreach (Court court in ViewBag.Courts)
                 {
-                    <option value="@court.Id">@court.Name, @string.Format("\u20ac {0:N2}", court.Price)</option>
+                    <option value="@court.Id">@court.Name</option>
                 }
             </select>
             <span asp-validation-for="CourtId" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label>Datum:</label>
-            <input asp-for="Date" class="form-control" type="date" id="dateInput" min="@DateTime.Today.ToString("yyyy-MM-dd")"/>
+            <input asp-for="Date" class="form-control" type="date" id="dateInput" min="@DateTime.Today.ToString("yyyy-MM-dd")" />
             <span asp-validation-for="Date" class="text-danger"></span>
         </div>
         <div class="form-group">
@@ -144,3 +144,5 @@
         fetchAvailableHours();
     });
 </script>
+
+

@@ -54,28 +54,23 @@ public class AuthController(ApplicationDbContext context) : Controller
         return RedirectToAction("Login");
     }
 
-
+    
     /// <summary>
-    /// Show the user who he is
-    /// TODO: make debug mode only
+    /// Show the user a register form
     /// </summary>
     /// <returns></returns>
-    //public async Task<IActionResult> WhoAmI()
-    //{
-    //    var jwtService = new JwtService(Request);
-    //    if (!jwtService.ValidateToken())
-    //        return View();
-    //    var id = jwtService.GetUserId();
-    //    return id == null
-    //        ? View()
-    //        : View(await service.GetByIdAsync(id.Value));
-    //}
-
     public IActionResult Register()
     {
         return View(new RegisterViewModel());
     }
-
+    
+    
+    /// <summary>
+    /// Register the user when all values are valid and log them in
+    /// if model is not valid show the register form with the problems
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
@@ -112,6 +107,11 @@ public class AuthController(ApplicationDbContext context) : Controller
         return await Login(new LoginViewModel { Email = model.Email, Password = model.Password});
     }
 
+    
+    /// <summary>
+    /// Set the session cookie 'token'
+    /// </summary>
+    /// <param name="user">The user to generte the token from</param>
     private void SetTokenCookie(User? user)
     {
         var cookieOptions = new CookieOptions { HttpOnly = true };
@@ -121,11 +121,20 @@ public class AuthController(ApplicationDbContext context) : Controller
             Response.Cookies.Append("Token", new JwtService(user).Token!, cookieOptions);
     }
 
+    /// <summary>
+    /// Show the user their profile
+    /// </summary>
+    /// <returns></returns>
     public IActionResult Profile()
     {
         return View();
     }
 
+    /// <summary>
+    /// Change the password of the user that currently logged in
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
     {

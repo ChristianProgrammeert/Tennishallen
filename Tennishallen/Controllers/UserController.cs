@@ -36,6 +36,11 @@ public class UserController(ApplicationDbContext context) : Controller
 
     }
 
+    /// <summary>
+    /// Delete the user with the given id
+    /// </summary>
+    /// <param name="id">The id of the user</param>
+    /// <returns></returns>
     public async Task<IActionResult> Delete(Guid id)
     {
         try
@@ -50,6 +55,12 @@ public class UserController(ApplicationDbContext context) : Controller
         return RedirectToAction("Index");
     }
 
+    
+    /// <summary>
+    /// show the user an edit form filled with user data from the given id
+    /// </summary>
+    /// <param name="guid">id the of the user to edit</param>
+    /// <returns></returns>
     public async Task<IActionResult> Edit(Guid guid)
     {
         var user = await authService.GetByIdAsync(guid, u => u.Groups);
@@ -74,6 +85,12 @@ public class UserController(ApplicationDbContext context) : Controller
             );
     }
     
+    /// <summary>
+    /// Edit a user or show validation errors to the client
+    /// </summary>
+    /// <param name="guid">id of the user to edit</param>
+    /// <param name="model">data to update the user with</param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> Edit(Guid guid, UserViewModel model)
     {
@@ -107,6 +124,10 @@ public class UserController(ApplicationDbContext context) : Controller
     }
     
 
+    /// <summary>
+    /// Show the user a create form
+    /// </summary>
+    /// <returns></returns>
     public async Task<IActionResult> Create()
     {
         return View(
@@ -114,6 +135,11 @@ public class UserController(ApplicationDbContext context) : Controller
             );
     }
     
+    /// <summary>
+    /// Create a user from the given data, when data is invalid show form with problems
+    /// </summary>
+    /// <param name="model">the model to save the data from</param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> Create(UserViewModel model)
     {

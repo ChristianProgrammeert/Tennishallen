@@ -14,6 +14,10 @@ public class AuthFilter(params Group.GroupName[] groups) : ActionFilterAttribute
         "/auth/login",
     ];
 
+    /// <summary>
+    /// When user is not logged in with the right role redirect them to the login page or show the unauthorized package
+    /// </summary>
+    /// <param name="context"></param>
     public override void OnActionExecuting(ActionExecutingContext context)
     {
         base.OnActionExecuting(context);
@@ -26,8 +30,7 @@ public class AuthFilter(params Group.GroupName[] groups) : ActionFilterAttribute
             return;
         }
 
-        var token = context.HttpContext.Request.Cookies["Token"];
-        context.HttpContext.User = service.GetClaimsIdentity(token);
+        context.HttpContext.User = service.GetClaimsIdentity();
         if (service.GetUserGroups()?.Any(groups.Contains) == true) return;
         context.HttpContext.Response.Clear();
         context.Result = new UnauthorizedObjectResult("Unauthorized");

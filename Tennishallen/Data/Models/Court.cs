@@ -13,6 +13,11 @@ public class Court : IBaseEntity<int>
     public double Price { get; set; }
     public List<Reservation> Reservations { get; set; }
 
+    
+    /// <summary>
+    /// Create a bunch of default courts when the model is created
+    /// </summary>
+    /// <param name="model">the model to create defaults on</param>
     internal static void OnModelCreating(ModelBuilder model)
     {
         model.Entity<Court>().HasData(

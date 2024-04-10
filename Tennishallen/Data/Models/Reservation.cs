@@ -18,6 +18,11 @@ public class Reservation : IBaseEntity<int>
     public DateOnly Date { get; set; }
     public int Hour { get; set; }
 
+    
+    /// <summary>
+    /// Set the relations of Resrvation
+    /// </summary>
+    /// <param name="model">the model to create the raltions on</param>
     internal static void OnModelCreating(ModelBuilder model)
     {
         model.Entity<Reservation>()

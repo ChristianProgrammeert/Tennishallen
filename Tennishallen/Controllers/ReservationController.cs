@@ -13,13 +13,12 @@ using Tennishallen.Data.Utils;
 
 namespace Tennishallen.Controllers
 {
-    //[AuthFilter(Group.GroupName.Admin, Group.GroupName.Assistent, Group.GroupName.Dentist)]
+    [AuthFilter(Group.GroupName.Admin, Group.GroupName.Member)]
     public class ReservationController(ApplicationDbContext context) : Controller
     {
         ReservationService reservationService = new(context);
         AuthService userService = new(context);
 
-        // [AuthFilter(Group.GroupName.Admin, Group.GroupName.Member, Group.GroupName.Coach)]
         public async Task<IActionResult> Index()
         {
             var token = HttpContext.Request.Cookies["Token"];
@@ -27,7 +26,7 @@ namespace Tennishallen.Controllers
             var group = new JwtService(Request).GetUserGroups();
 
             IEnumerable<Reservation> reservation;
-            if (group.Contains(Group.GroupName.Admin) || group.Contains(Group.GroupName.Member))
+            if (group.Contains(Group.GroupName.Admin))
 				reservation = await reservationService.GetAllAsync(a => a.Court, a => a.Coach, a => a.Member);
             else
 				reservation = await reservationService.GetLessonByUser(id);

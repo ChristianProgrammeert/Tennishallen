@@ -102,9 +102,14 @@ public class JwtService
         }
     }
     
-    public ClaimsPrincipal GetClaimsIdentity(string? token)
+    /// <summary>
+    /// Get the claims identity from the token
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public ClaimsPrincipal GetClaimsIdentity()
     {
-        var jsonToken = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
+        var jsonToken = new JwtSecurityTokenHandler().ReadToken(Token) as JwtSecurityToken;
         var identity = new ClaimsIdentity(jsonToken?.Claims, "Bearer");
         return new ClaimsPrincipal(identity);
     }

@@ -38,8 +38,12 @@ public class User : IBaseEntity<Guid>
     {
         get => [.. MemberReservations ?? [], .. CoachReservations ?? []];
     }
-
-
+    
+    
+    /// <summary>
+    /// Create relations and default users
+    /// </summary>
+    /// <param name="model">The model to expand on</param>
     internal static void OnModelCreating(ModelBuilder model)
     {
         model.Entity<Group>()

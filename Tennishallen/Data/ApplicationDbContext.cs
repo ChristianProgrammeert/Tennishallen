@@ -10,6 +10,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Reservation> Reservations { get; set; }
     public DbSet<Court> Courts { get; set; }
 
+    
+    /// <summary>
+    /// create the model for each model
+    /// </summary>
+    /// <param name="modelBuilder">the model to create</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

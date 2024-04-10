@@ -14,7 +14,11 @@ public class DateBeforeToday : ValidationAttribute
     {
     }
 
-
+    /// <summary>
+    /// Check if value is before today
+    /// </summary>
+    /// <param name="value">the value to validate</param>
+    /// <returns>True if datetime is before now</returns>
     public override bool IsValid(object? value)
     {
         if (!(value is DateTime birthdate))

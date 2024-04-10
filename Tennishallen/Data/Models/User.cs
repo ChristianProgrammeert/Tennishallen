@@ -101,7 +101,7 @@ public class User : IBaseEntity<Guid>
                 {
                     Id = i + 2,
                     UserId = guid,
-                    Name = Group.GroupName.Admin,
+                    Name = Group.GroupName.Coach,
                 });
         }
     }

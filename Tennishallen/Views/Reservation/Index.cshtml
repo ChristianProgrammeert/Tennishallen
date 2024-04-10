@@ -1,0 +1,86 @@
+﻿@model List<Tennishallen.Data.Models.Reservation>
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+<div>
+    <div class="d-flex flex-row justify-content-between">
+        <h1 class="display-4">Afspraken</h1>
+        <div class="d-flex align-items-center">
+            <a asp-action="Create">
+                <button type="button" class="btn btn-success">
+                    <i class="bi bi-house-add"></i>
+                    Afspraak Toevoegen
+                </button>
+            </a>
+        </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Docent</th>
+                <th scope="col">Member</th>
+                <th scope="col">Veld</th>
+                <th scope="col">Datum en tijd</th>
+                <th scope="col">Bewerk</th>
+                <th scope="col">Verwijder</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var appointment in Model)
+            {
+                <tr>
+                    <th scope="row">
+                        <a asp-action="View" asp-route-id="@appointment.Id">
+                            @appointment.Id
+                        </a>
+                    </th>
+                    @if (appointment.Coach == null)
+					{
+						<td>
+							Geen docent
+						</td>
+					}
+					else
+					{
+						<td>
+							@appointment.Coach.Fullname
+						</td>
+					}
+                    <td>
+                        @appointment.Member.Fullname
+                    </td>
+                    <td>
+                        @appointment.Court.Name
+                    </td>
+                    <td>
+                        @appointment.Date
+                        @($"{appointment.Hour:00}:00")
+                    </td>
+                    <td>
+                        <div class="d-flex flex-row float-end">
+                            <a asp-action="Edit" asp-route-appointmentId="@appointment.Id">
+                                <button type="button" class="btn btn-warning">
+                                    <i class="bi bi-pencil-square"></i>
+                                    Bewerk
+                                </button>
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex flex-row float-end">
+                            <a asp-action="Delete" asp-route-id="@appointment.Id">
+                                <button type="button" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                    Verwijder
+                                </button>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

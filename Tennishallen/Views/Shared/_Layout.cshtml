@@ -90,6 +90,10 @@
 			}
 		}
 
+		main {
+			margin-bottom: 150px; /* Adjust the margin-bottom to the height of the footer */
+		}
+
 		@@media (max-width: 768px) {
 			.collapsed-sidebar .d-sm-inline {
 				display: none !important;
@@ -122,6 +126,12 @@
 												<span class="ms-1 d-sm-inline collapsed-text">Tennisbanen</span>
 											</a>
 										</li>
+										<li class="nav-item">
+											<a asp-area="" asp-controller="User" asp-action="Create" class="nav-link px-0 align-middle">
+												<i class="bi bi-person-plus"></i>
+												<span class="ms-1 d-sm-inline collapsed-text">User toevoegen</span>
+											</a>
+										</li>
 									}
 									@if (isMember)
 									{
@@ -145,6 +155,12 @@
 										<a asp-controller="Auth" asp-action="Login" class="nav-link px-0 align-middle">
 											<i class="bi bi-box-arrow-in-right"></i>
 											<span class="ms-1 d-sm-inline collapsed-text">Inloggen</span>
+										</a>
+									</li>
+									<li class="nav-item">
+										<a asp-controller="Auth" asp-action="Register" class="nav-link px-0 align-middle">
+											<i class="bi bi-person-plus"></i>
+											<span class="ms-1 d-sm-inline collapsed-text">Registreren</span>
 										</a>
 									</li>
 								}

@@ -1,0 +1,97 @@
+@using Tennishallen.Data.Models
+@model System.Collections.Generic.List<Tennishallen.Data.Models.Reservation>
+
+@{
+    User user = ViewBag.user;
+    ViewBag.Title = "Factuur";
+    Layout = "_Layout";
+}
+@if (Model.Count == 0)
+{
+    <h1>something did a fucky wucky, no reservations found for this user in this month UwU</h1>
+}
+else
+{
+    <section class="py-3 py-md-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-9 col-xl-8 col-xxl-7">
+                    <div class="row gy-3 mb-3">
+                        <div class="col-6">
+                            <h2 class="text-uppercase text-endx m-0">Factuur</h2>
+                        </div>
+                        <div class="col-6">
+                            <a class="d-block text-end" href="#!">
+                                <img src="/assets/img/TennishallenLogo.png" class="img-fluid" alt="" width="135" height="44">
+                            </a>
+                        </div>
+                        <div class="col-12">
+                            <h4>Factuur van</h4>
+                            <address>
+                                <strong>Tennishallen Hengelo</strong><br>
+                                1234AB Tennisstraat 1<br>
+                                Hengelo, Overijssel, Nederland<br>
+                                Europa<br>
+                                Phone: (123) 456-7890<br>
+                                Email: r.vandongen@tennishallenhengelo.com
+                            </address>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-6 col-md-8">
+                            <h4>Factuur voor</h4>
+                            <address>
+                                <strong>@user.Fullname</strong><br>
+                                @user.PostalCode @user.Address <br>
+                                @user.City<br>
+                                Phone: @user.Phone<br>
+                                Email: @user.Email
+                            </address>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <h4 class="row">
+                                <span class="col-6">Invoice #</span>
+                                <span class="col-6 text-sm-end">@user.Id.GetHashCode().ToString().Substring(0,4)@Model.First().Date.Month@Model.First().Date.Year</span>
+                            </h4>
+                            <div class="row">
+                                <span class="col-6">Account</span>
+                                <span class="col-6 text-sm-end">@user.Id.ToString().Split('-')[0]</span>
+                                <span class="col-6">Order ID</span>
+                                <span class="col-6 text-sm-end">@user.Id.GetHashCode().ToString().Substring(0,4)@Model.First().Date.Month@Model.First().Date.Year</span>
+                                <span class="col-6">Factuur Datum</span>
+                                <span class="col-6 text-sm-end">1/@Model.First().Date.Month/@Model.First().Date.Year</span>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" class="text-uppercase">Reservering</th>
+                                        <th scope="col" class="text-uppercase">Veld</th>
+                                        <th scope="col" class="text-uppercase text-end">Docent</th>
+                                        <th scope="col" class="text-uppercase text-end">Kosten</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="table-group-divider">
+                                    @foreach (var reservation in Model)
+                                    {
+                                        <tr>
+                                            <th scope="row">@reservation.Date, @reservation.Hour:00</th>
+                                            <td>@reservation.Court?.Name</td>
+                                            <td class="text-end">@reservation.Coach?.Fullname</td>
+                                            <td class="text-end">@reservation.Price</td>
+                                        </tr>
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}

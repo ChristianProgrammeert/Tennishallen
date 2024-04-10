@@ -9,11 +9,11 @@ public class Reservation : IBaseEntity<int>
 {
     [Key] public int Id { get; set; }
     public Guid MemberId { get; set; }
-    public User? Member{ get; set; }
-    public Guid CoachId { get; set; }
+    public User Member{ get; set; }
+    public Guid? CoachId { get; set; }
     public User? Coach { get; set; }
-    public Guid CourtId { get; set; }
-    public Court? Court { get; set; }
+    public int CourtId { get; set; }
+    public Court Court { get; set; }
     public double Price { get; set; }
     public DateOnly Date { get; set; }
     public int Hour { get; set; }
@@ -30,6 +30,12 @@ public class Reservation : IBaseEntity<int>
             .HasOne(r => r.Coach)
             .WithMany(u => u.CoachReservations)
             .HasForeignKey(a => a.CoachId)
+            .OnDelete(DeleteBehavior.NoAction);
+        
+        model.Entity<Reservation>()
+            .HasOne(r => r.Court)
+            .WithMany(u => u.Reservations)
+            .HasForeignKey(a => a.CourtId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

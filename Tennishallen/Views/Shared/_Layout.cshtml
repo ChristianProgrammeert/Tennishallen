@@ -89,6 +89,10 @@
 			}
 		}
 
+		main {
+			margin-bottom: 150px; /* Adjust the margin-bottom to the height of the footer */
+		}
+
 		@@media (max-width: 768px) {
 			.collapsed-sidebar .d-sm-inline {
 				display: none !important;
@@ -119,6 +123,12 @@
 											<a asp-area="" asp-controller="Court" asp-action="Index" class="nav-link px-0 align-middle">
 												<i class="bi bi-aspect-ratio"></i>
 												<span class="ms-1 d-sm-inline collapsed-text">Tennisbanen</span>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a asp-area="" asp-controller="User" asp-action="Create" class="nav-link px-0 align-middle">
+												<i class="bi bi-person-plus"></i>
+												<span class="ms-1 d-sm-inline collapsed-text">User toevoegen</span>
 											</a>
 										</li>
 									}

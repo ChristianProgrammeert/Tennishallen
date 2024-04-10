@@ -79,13 +79,5 @@ namespace Tennishallen.Services
                          .Include(a => a.Member)
 						 .ToListAsync();
 		}
-
-		internal async Task<List<Reservation>> GetCourtsByUser(Guid? id)
-		{
-			return await context.Reservations
-						 .Where(a => a.MemberId == id)
-						 .Include(a => a.Court)
-						 .ToListAsync();
-		}
 	}
 }

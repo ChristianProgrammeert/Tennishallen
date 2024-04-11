@@ -65,7 +65,6 @@ public class ReservationController(ApplicationDbContext context) : Controller
     public async Task<IActionResult> Create(Reservation model)
     {
         var userId = new JwtService(Request).GetUserId();
-        await fillViewBag();
         model.MemberId = userId.Value;
         model.Price = await reservationService.GetTotal(model);
         model = await reservationService.AddAsync(model);
@@ -130,7 +129,6 @@ public class ReservationController(ApplicationDbContext context) : Controller
     public async Task<IActionResult> Edit(int appointmentId, Reservation reservation)
     {
         var userId = new JwtService(Request).GetUserId();
-        await fillViewBag();
         reservation.MemberId = userId.Value;
         if (reservation.Id == 0 && appointmentId != 0) reservation.Id = appointmentId;
         reservation.Price = await reservationService.GetTotal(reservation);

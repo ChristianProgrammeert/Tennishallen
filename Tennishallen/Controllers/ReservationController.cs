@@ -26,11 +26,16 @@ public class ReservationController(ApplicationDbContext context) : Controller
         var group = new JwtService(Request).GetUserGroups();
 
         IEnumerable<Reservation> reservation;
+        if (group != null) { 
         if (group.Contains(Group.GroupName.Admin))
             reservation = await reservationService.GetAllAsync(a => a.Court, a => a.Coach, a => a.Member);
         else
             reservation = await reservationService.GetLessonByUser(id);
         return View(reservation.ToList());
+        } else
+        {
+            return RedirectToAction("Login", "Auth");
+        }
     }
 
     /// <summary>
@@ -48,6 +53,7 @@ public class ReservationController(ApplicationDbContext context) : Controller
     ///     Show the user a form to create a reservation
     /// </summary>
     /// <returns></returns>
+    [AuthFilter(Group.GroupName.Member)]
     public async Task<IActionResult> Create()
     {
         await fillViewBag();
@@ -61,6 +67,7 @@ public class ReservationController(ApplicationDbContext context) : Controller
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
+    [AuthFilter(Group.GroupName.Member)]
     [HttpPost]
     public async Task<IActionResult> Create(Reservation model)
     {
@@ -108,6 +115,7 @@ public class ReservationController(ApplicationDbContext context) : Controller
     /// </summary>
     /// <param name="appointmentId">the id of the reservation to edit</param>
     /// <returns></returns>
+    [AuthFilter(Group.GroupName.Member)]
     public async Task<IActionResult> Edit(int appointmentId)
     {
         await fillViewBag();
@@ -125,6 +133,7 @@ public class ReservationController(ApplicationDbContext context) : Controller
     /// </summary>
     /// <param name="appointmentId">the id of the reservation to edit</param>
     /// <param name="reservation">the model with user filled data</param>
+    [AuthFilter(Group.GroupName.Member)]
     [HttpPost]
     public async Task<IActionResult> Edit(int appointmentId, Reservation reservation)
     {
